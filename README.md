@@ -124,8 +124,6 @@ El skill no fuerza ningún dialecto y nunca mezcla variantes dentro de un mismo 
 
 En [`EJEMPLOS.md`](EJEMPLOS.md) hay casos antes/después para cinco registros: corporativo, académico, mensaje casual, explicación técnica y descripción de producto.
 
-En [`PRUEBAS.md`](PRUEBAS.md) hay un banco de pruebas: diez textos generados por IA pasados por la skill, con evaluación de calidad por caso y una comparación con el Humanizer original en inglés.
-
 ## Decisiones de diseño informadas por la investigación
 
 Antes de adaptar el skill se investigó el problema en español, sin dar por hecho que los patrones del inglés sirvieran. Esto es lo que se encontró y cómo dio forma al diseño.
