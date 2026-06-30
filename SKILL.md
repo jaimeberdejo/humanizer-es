@@ -1,6 +1,6 @@
 ---
 name: humanizer-es
-version: 1.1.0
+version: 1.2.0
 description: |
   Edita textos en español para que suenen naturales, creíbles y escritos por una
   persona, sin que parezcan generados por IA. Úsalo al revisar o reescribir texto
@@ -11,7 +11,9 @@ description: |
   ("no solo... sino también"), tono corporativo vacío, marketing hueco, conectores
   inflados, mayúsculas de estilo inglés en títulos, eliminación de la raya (—) por ser
   una marca habitual de la IA, y artefactos de chatbot. Respeta variante (España, Latinoamérica, neutro), registro,
-  voz del autor y contenido factual.
+  voz del autor y contenido factual. Incluye un modo académico/TFM más conservador
+  (no inventa afirmaciones ni limitaciones, conserva citas y terminología) y reglas
+  para editar archivos completos sin mezclar el texto final con notas del editor.
 license: MIT
 compatibility: any-agent
 allowed-tools:
@@ -451,6 +453,22 @@ El español cambia mucho según el registro, y la IA tiende a aplanarlos todos h
 - **Marketing:** evita el entusiasmo de relleno y el beneficio genérico. Concreta qué hace el producto y para quién. Una frase honesta vende más que tres exclamaciones.
 - **Ensayo personal / opinión:** aquí sí entra la voz, la duda, la primera persona, el ritmo irregular. Es el registro donde más se aplica la sección **Personalidad y voz**.
 
+# Modo académico / TFM
+
+Cuando trabajes con un TFM, una tesis, un artículo académico o cualquier documento universitario largo, activa este modo defensivo. Un TFM no es un post de LinkedIn con bata de laboratorio: tiene citas, definiciones, hipótesis, metodología, terminología, tablas y bibliografía, y un cambio aparentemente menor puede invalidar el contenido o introducir una afirmación falsa.
+
+Reglas, por encima de cualquier otra sección de este skill:
+
+- **No inventes nada.** Ni afirmaciones, ni autores, ni fuentes, ni limitaciones, ni hipótesis, ni interpretaciones, ni matices que no estén ya en el original. Esto incluye los "añadidos inocentes": "la bibliografía apenas lo ha estudiado", "esto sugiere causalidad", "a diferencia de otros autores". Si no estaba, no entra.
+- **No fortalezcas ni debilites una afirmación.** Una correlación sigue siendo una correlación; un "puede" no pasa a "es"; un resultado provisional no se presenta como concluyente.
+- **Conserva intactos** citas, referencias, llamadas a bibliografía, notas al pie, tablas, figuras, nombres de variables, ecuaciones, símbolos y terminología técnica. No los reformules ni los "mejores".
+- **No cambies la estructura argumental** (orden de secciones, numeración, hipótesis, pasos de la metodología) salvo que el usuario lo pida.
+- **No subas el texto a opinativo, personal ni comercial.** Nada de primera persona enfática, voz de marca ni entusiasmo. El "alma" de la sección de personalidad **no** aplica aquí.
+- **No cambies precisión por naturalidad.** Si una frase es densa porque el contenido técnico lo exige, déjala densa. Mejor exacta que bonita.
+- **Humaniza solo la superficie:** quita muletillas ("es importante destacar", "cabe señalar"), calcos, rigidez, nominalización de adorno y abstracción innecesaria, manteniendo el tono académico. La intensidad por defecto aquí es **suave**, no media.
+
+Ante cualquier duda en este modo, no edites: deja la frase como está y, si acaso, señálala como sugerencia aparte.
+
 # Niveles de intensidad
 
 Salvo que te pidan otra cosa, edita con intensidad **media**. Si la persona indica una, respétala.
@@ -487,7 +505,18 @@ Ante la duda entre sonar mejor o respetar el significado, gana el significado.
 
 Antes de entregar, repasa que no haya quedado ninguna raya (—), salvo en diálogos literarios, ni mayúsculas de título a la inglesa.
 
-Entrega: el borrador, las viñetas de "todavía suena a IA", la versión final y, si ayuda, un resumen corto de los cambios. Si tuviste que asumir variante o registro, dilo en una línea.
+Entrega **en chat**: el borrador, las viñetas de "todavía suena a IA", la versión final y, si ayuda, un resumen corto de los cambios. Si tuviste que asumir variante o registro, dilo en una línea.
+
+# Edición de archivos completos
+
+El flujo borrador → auditoría → versión final de arriba es para el chat. Cuando el usuario pide editar un documento completo o crear una versión humanizada de un archivo (un TFM, un informe, un artículo largo), cambia a este modo para no mezclar el comentario con el texto:
+
+- **No metas la auditoría, las notas ni los "todavía suena a IA" dentro del documento humanizado.** El archivo final va limpio, sin anotaciones del editor.
+- **Escribe la versión final en un archivo separado** (por ejemplo, `documento-humanizado.md`), sin tocar el original salvo que el usuario pida editarlo en su sitio.
+- **Si se pide un control de calidad o un resumen de cambios, ponlo en otro archivo aparte** (por ejemplo, `informe-cambios.md`), nunca dentro del documento.
+- **Mantén intactos** los nombres de secciones, la numeración, las citas, las referencias, las tablas y la estructura, salvo instrucción contraria.
+- **No reescribas con libertad creativa** las partes técnicas, legales o metodológicas: ahí manda la precisión.
+- Para documentos académicos, aplica además el **Modo académico / TFM**.
 
 # Ejemplo completo
 

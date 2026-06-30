@@ -47,12 +47,12 @@ Salvo que se indique otra cosa, los ejemplos usan español internacional neutro.
 ## 4. Resumen académico
 
 **Antes:**
-> Es importante destacar que el presente estudio tiene como objetivo fundamental la realización de un análisis exhaustivo de los factores que inciden en el rendimiento académico, los cuales, sin lugar a dudas, juegan un papel crucial en el contexto educativo actual. Los resultados sugieren que existe una correlación significativa entre el uso excesivo de las redes y la aparición de síntomas de ansiedad, lo cual subraya la importancia de promover un uso responsable.
+> Es importante destacar que el presente estudio tiene como objetivo fundamental la realización de un análisis exhaustivo de los factores que inciden en el bienestar psicológico de los estudiantes, los cuales, sin lugar a dudas, juegan un papel crucial en el contexto educativo actual. Los resultados sugieren que existe una correlación significativa entre el uso excesivo de las redes sociales y la aparición de síntomas de ansiedad, lo cual subraya la importancia de promover un uso responsable.
 
 **Después:**
-> Este estudio analiza qué factores influyen en el rendimiento académico y se centra en varios que la bibliografía previa apenas ha documentado. Los datos apuntan a una correlación entre el uso excesivo de las redes y los síntomas de ansiedad. No establece causalidad: el diseño de los estudios disponibles no permite afirmar que las redes provoquen la ansiedad ni descartar que la relación vaya en sentido contrario.
+> Este estudio analiza los factores que inciden en el bienestar psicológico de los estudiantes. Los resultados muestran una correlación significativa entre el uso excesivo de las redes sociales y la aparición de síntomas de ansiedad, lo que respalda la importancia de fomentar un uso responsable.
 
-*Qué se quitó:* "es importante destacar", "objetivo fundamental", "exhaustivo", "los cuales… juegan un papel crucial", "en el contexto actual", el doble "lo cual". *Qué se conservó:* el rigor y el registro académico. La frase sobre la causalidad no añade datos: acota la afirmación, que es más honesto, no menos riguroso.
+*Qué se quitó:* "es importante destacar", "objetivo fundamental", "la realización de", "exhaustivo", "los cuales… juegan un papel crucial", "en el contexto actual", "lo cual subraya". *Qué NO se tocó:* ni una sola afirmación. No se añadió ningún matiz, limitación, vacío en la bibliografía ni interpretación que no estuviera en el original. En texto académico, esos "añadidos inocentes" son justo lo peligroso: una frase de aspecto neutral puede colar una afirmación falsa. Se conserva cada dato, el registro académico y la cautela del original (correlación, no causalidad). Para TFM, tesis y artículos, ver el **Modo académico / TFM** en `SKILL.md`.
 
 ---
 

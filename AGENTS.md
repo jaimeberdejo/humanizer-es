@@ -32,6 +32,7 @@ Un *skill* portátil escrito íntegramente en Markdown. El artefacto en tiempo d
 - **Los ejemplos deben ser español nativo,** no traducciones. Si un antes/después suena a inglés traducido, está mal aunque ilustre el patrón.
 - **Las suposiciones regionales deben ser explícitas.** España, Latinoamérica y neutro se tratan por separado; el neutro es el valor por defecto cuando no se especifica. Nunca mezcles variantes dentro de un mismo texto ni fuerces *vosotros*, *ustedes* o modismos locales sin que se pidan.
 - **Preservar significado por encima de "sonar mejor".** El skill nunca debe inventar datos, cifras, citas ni ejemplos, ni cambiar la postura o el registro del autor. Si editas el *prompt*, no debilites estas reglas de preservación.
+- **El "Modo académico / TFM" y la "Edición de archivos completos" son defensivos a propósito.** No los suavices. El primero prohíbe inventar afirmaciones o limitaciones (incluidos los "añadidos inocentes") y conservar citas, tablas y terminología; el segundo evita mezclar notas del editor con el texto final. Los ejemplos de `EJEMPLOS.md` no deben añadir ninguna afirmación que no esté en el "antes"; el caso académico es el modelo a seguir.
 
 ## Editar SKILL.md
 

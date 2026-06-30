@@ -109,6 +109,11 @@ El original ataca *tells* del inglés (em dash, *title case*, "rule of three", v
 
 El skill no fuerza ningún dialecto y nunca mezcla variantes dentro de un mismo texto.
 
+## Modos especiales
+
+- **Modo académico / TFM.** Para TFM, tesis, artículos o documentos universitarios largos, el skill activa un modo defensivo: no inventa ni una afirmación, autor, fuente, limitación ni interpretación; conserva intactas citas, referencias, tablas, ecuaciones y terminología; no fortalece ni debilita los resultados; y humaniza solo la superficie (muletillas, calcos, rigidez) sin tocar la precisión ni la estructura argumental. La intensidad por defecto aquí es suave.
+- **Edición de archivos completos.** Al humanizar un documento entero, el skill escribe la versión final limpia en un archivo separado y, si se pide control de calidad, en otro archivo aparte; nunca mezcla las notas del editor dentro del texto, y mantiene secciones, numeración, citas y estructura.
+
 ## Patrones detectados
 
 25 patrones en 6 bloques (ver `SKILL.md` para cada uno con ejemplos antes/después):
@@ -151,6 +156,7 @@ Adaptación al español de [blader/humanizer](https://github.com/blader/humanize
 
 ## Historial de versiones
 
+- **1.2.0** — Tres cambios pensados para documentos académicos largos. (1) Nuevo **Modo académico / TFM**: regla defensiva que prohíbe inventar afirmaciones, autores, fuentes, limitaciones o interpretaciones (incluidos los "añadidos inocentes"), conserva citas, tablas, ecuaciones y terminología, y no fortalece ni debilita los resultados; intensidad suave por defecto. (2) Nueva sección **Edición de archivos completos**: la versión final va limpia en un archivo separado, el control de calidad en otro, y nunca se mezclan notas del editor con el texto. (3) Corregido el ejemplo académico de `EJEMPLOS.md`, que añadía una afirmación ("la bibliografía apenas lo ha documentado") inexistente en el original; ahora no inventa nada y sirve de modelo del modo académico.
 - **1.1.0** — Dos cambios. (1) La raya (—) pasa a eliminarse siempre en la versión final, no solo cuando se usa al estilo inglés: se ha vuelto una marca reconocible de la IA y por eso se trata como un tell aunque esté bien puesta. Única excepción: la raya de diálogo literario. (2) Reequilibrio contra el aplanamiento: la skill estaba encuadrada para borrar más que para reescribir, y desinflaba textos. Se añadió un "Principio rector" (sustituir, no vaciar; toque mínimo; la voz manda; ante la duda, editar de menos), una auditoría de dos preguntas, una checklist en dos columnas ("¿quité la marca de IA?" / "¿conservé la calidad?") y se reencuadraron los ejemplos por patrón como quirúrgicos, no como modelo de longitud. Ejemplos de `EJEMPLOS.md` reescritos para conservar peso y voz, y sin inventar datos.
 - **1.0.0** — Primera versión de la adaptación al español. Skill reescrito desde cero como `humanizer-es`: 25 patrones en 6 bloques pensados para el español generado por IA, manejo de variantes (España / LatAm / neutro), tabla de registros, niveles de intensidad, calibración de voz, ejemplo completo y lista de control. No es una traducción del original en inglés.
 
