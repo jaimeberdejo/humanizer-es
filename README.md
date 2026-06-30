@@ -122,7 +122,7 @@ El skill no fuerza ningún dialecto y nunca mezcla variantes dentro de un mismo 
 
 ## Ejemplos
 
-En [`EJEMPLOS.md`](EJEMPLOS.md) hay casos antes/después para cinco registros: corporativo, académico, mensaje casual, explicación técnica y descripción de producto.
+En [`EJEMPLOS.md`](EJEMPLOS.md) hay un conjunto de casos antes/después en distintos registros (de post corporativo a caption de redes), con notas de calidad por caso, una comparación con el Humanizer en inglés y los límites honestos de la skill.
 
 ## Decisiones de diseño informadas por la investigación
 
