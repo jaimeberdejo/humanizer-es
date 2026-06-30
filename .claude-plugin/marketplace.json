@@ -1,18 +1,18 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace-manifest.json",
-  "name": "humanizer",
+  "name": "humanizer-es",
   "owner": {
-    "name": "blader",
-    "url": "https://github.com/blader"
+    "name": "jaimeberdejo",
+    "url": "https://github.com/jaimeberdejo"
   },
-  "description": "The humanizer skill, installable as a Claude Code plugin.",
+  "description": "Humanizer Español: el skill de humanización de textos en español, instalable como plugin de Claude Code.",
   "plugins": [
     {
-      "name": "humanizer",
+      "name": "humanizer-es",
       "source": "./",
-      "description": "Remove signs of AI-generated writing from text, making it sound more natural and human. Based on Wikipedia's \"Signs of AI writing\" guide.",
+      "description": "Edita textos en español para que suenen naturales y humanos, no generados por IA. Adaptación nativa al español del Humanizer, con detectores propios y manejo de variantes (España, Latinoamérica, neutro).",
       "license": "MIT",
-      "keywords": ["writing", "editing", "ai-detection", "humanize", "prose", "style"]
+      "keywords": ["escritura", "edicion", "espanol", "deteccion-ia", "humanizar", "estilo", "redaccion"]
     }
   ]
 }

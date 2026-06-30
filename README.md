@@ -1,213 +1,158 @@
-# Humanizer
+# Humanizer Español
 
-A portable agent skill that removes signs of AI-generated writing from text, making it sound more natural and human. It is plain Markdown, so it can run in any harness that supports skill-style instructions.
+Un *skill* portátil que edita textos **en español** para que suenen naturales, creíbles y escritos por una persona, no por una IA. Es Markdown puro, así que funciona en cualquier *harness* que cargue skills (Claude Code, OpenCode, Codex y otros).
 
-## Installation
+No es el Humanizer en inglés traducido. Es una adaptación nativa: la taxonomía, los detectores y los ejemplos están rediseñados para los fallos propios del español generado por IA (muletillas, calcos del inglés, nominalización, simetría forzada, tono corporativo, raya al estilo inglés, títulos en mayúsculas a la inglesa) y para sus variantes (España, Latinoamérica, neutro).
 
-### Skills CLI
+## Qué hace
 
-Install with the cross-agent skills CLI:
+Detecta y corrige las señales típicas de escritura por IA en español, conservando el significado, la intención, los datos, el tono, el registro, la variante y la voz de quien escribe. Trabaja en un bucle **borrador → auditoría → versión final**: escribe una primera versión, se pregunta "¿qué hace que esto todavía suene a IA?" y reescribe para corregirlo.
 
-```bash
-npx skills add blader/humanizer
-```
+## Para quién es
 
-Update an existing install:
+- Quien redacta o revisa contenido en español (blogs, webs, correos, documentación, propuestas, marketing, textos académicos).
+- Quien usa IA para escribir y quiere que el resultado deje de "sonar a IA".
+- Equipos que necesitan respetar una variante (España / Latinoamérica / neutro) y un registro concretos.
 
-```bash
-npx skills update humanizer
-```
+## Instalación
 
-To install into every supported agent harness:
+### CLI de skills
 
 ```bash
-npx skills add blader/humanizer --agent '*'
+npx skills add jaimeberdejo/humanizer-es
 ```
 
-To target one configured harness, pass its agent name:
+Actualizar:
 
 ```bash
-npx skills add blader/humanizer --agent <agent-name>
+npx skills update humanizer-es
 ```
 
-### Claude Code plugin
+Instalar en todos los *harnesses* compatibles:
 
-Claude Code users can also install Humanizer as a plugin:
-
-```
-/plugin marketplace add blader/humanizer
-/plugin install humanizer@humanizer
+```bash
+npx skills add jaimeberdejo/humanizer-es --agent '*'
 ```
 
-The skill is then invoked as `/humanizer:humanizer`.
+### Plugin de Claude Code
+
+```
+/plugin marketplace add jaimeberdejo/humanizer-es
+/plugin install humanizer-es@humanizer-es
+```
+
+Se invoca como `/humanizer-es:humanizer-es`.
 
 ### Manual
 
-Any agent harness can use the skill directly because the runtime artifact is `SKILL.md`. Install it wherever your harness expects skill directories, or copy `SKILL.md` into an existing skill folder.
-
-For example:
+El artefacto en tiempo de ejecución es `SKILL.md`. Cópialo donde tu *harness* espere los skills:
 
 ```bash
-git clone https://github.com/blader/humanizer.git /path/to/your/skills/humanizer
+git clone https://github.com/jaimeberdejo/humanizer-es.git /ruta/a/tus/skills/humanizer-es
 ```
 
-Or, if you already have this repo cloned:
-
-```bash
-mkdir -p /path/to/your/skills/humanizer
-cp SKILL.md /path/to/your/skills/humanizer/
-```
-
-## Usage
-
-Invoke the skill however your agent harness exposes installed skills. Common forms include a slash command or a direct request:
+## Uso
 
 ```
-/humanizer
+/humanizer-es
 
-[paste your text here]
+[pega aquí tu texto]
 ```
 
 ```
-Please humanize this text: [your text]
+Humaniza este texto: [tu texto]
 ```
 
-### Voice Calibration
-
-To match your personal writing style, provide a sample of your own writing:
+Puedes indicar variante, registro e intensidad:
 
 ```
-/humanizer
-
-Here's a sample of my writing for voice matching:
-[paste 2-3 paragraphs of your own writing]
-
-Now humanize this text:
-[paste AI text to humanize]
+Humaniza esto en español de España, registro profesional, intensidad media:
+[tu texto]
 ```
 
-The skill will analyze your sentence rhythm, word choices, and quirks, then apply them to the rewrite instead of producing generic "clean" output.
+### Calibración de voz
 
-## Overview
+Para que respete tu estilo, pásale una muestra de cómo escribes:
 
-Based on [Wikipedia's "Signs of AI writing"](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) guide, maintained by WikiProject AI Cleanup. This comprehensive guide comes from observations of thousands of instances of AI-generated text.
+```
+/humanizer-es
 
-The skill also includes a final "obviously AI generated" audit pass and a second rewrite, to catch lingering AI-isms in the first draft.
+Esta es una muestra de cómo escribo, para que cojas el tono:
+[2-3 párrafos tuyos]
 
-### Key Insight from Wikipedia
+Ahora humaniza este texto:
+[texto generado por IA]
+```
 
-> "LLMs use statistical algorithms to guess what should come next. The result tends toward the most statistically likely result that applies to the widest variety of cases."
+Analiza tu ritmo de frase, tu vocabulario y tus manías, y los aplica en la reescritura en vez de devolverte un texto "limpio" pero genérico.
 
-## 33 Patterns Detected (with Before/After Examples)
+## Qué la diferencia del Humanizer en inglés
 
-### Content Patterns
+El original ataca *tells* del inglés (em dash, *title case*, "rule of three", vocabulario tipo *delve* o *tapestry*, comillas curvas). El español falla de otra manera, y este skill lo refleja:
 
-| # | Pattern | Before | After |
-|---|---------|--------|-------|
-| 1 | **Significance inflation** | "marking a pivotal moment in the evolution of..." | "was established in 1989 to collect regional statistics" |
-| 2 | **Notability name-dropping** | "cited in NYT, BBC, FT, and The Hindu" | "In a 2024 NYT interview, she argued..." |
-| 3 | **Superficial -ing analyses** | "symbolizing... reflecting... showcasing..." | Remove or expand with actual sources |
-| 4 | **Promotional language** | "nestled within the breathtaking region" | "is a town in the Gonder region" |
-| 5 | **Vague attributions** | "Experts believe it plays a crucial role" | "according to a 2019 survey by..." |
-| 6 | **Formulaic challenges** | "Despite challenges... continues to thrive" | Specific facts about actual challenges |
+| Tema | Inglés (original) | Español (esta adaptación) |
+|------|-------------------|---------------------------|
+| Raya / em dash | "Córtalas todas" | La raya **es correcta** en español; el tell es usarla **suelta y con espacios** al estilo inglés. Se corrige a la norma española, no se prohíbe. |
+| Comillas | Curvas → rectas | Depende de la variante: «latinas» en España editorial, "rectas" en LatAm y web. Coherencia antes que un único tipo. |
+| Títulos | *Title Case* → sentence case | Mayúscula **solo** en la primera palabra; el *Título En Mayúsculas* es un tell de texto traducido. |
+| Léxico | *delve, tapestry, vibrant* | Muletillas españolas: "es importante destacar", "en este sentido", "sin lugar a dudas", "solución integral". |
+| Calcos | (no aplica) | **Categoría nueva:** anglicismos y falsos amigos (*soportar*, *consistente*, *eventualmente*, *librería* por *biblioteca*, *basado en*). |
+| Sintaxis | Passive voice | **Nominalización pesada**, cadenas de "que / lo cual" y gerundios de relleno: los vicios reales del español. |
+| Variante | (no aplica) | Manejo explícito de España / Latinoamérica / neutro, sin forzar dialecto. |
+| Registro | Personalidad vs. neutro | Siete registros con reglas propias (informal, profesional, académico, técnico, marketing, etc.). |
 
-### Language Patterns
+## Variantes admitidas
 
-| # | Pattern | Before | After |
-|---|---------|--------|-------|
-| 7 | **AI vocabulary** | "Actually... additionally... testament... landscape... showcasing" | "also... remain common" |
-| 8 | **Copula avoidance** | "serves as... features... boasts" | "is... has" |
-| 9 | **Negative parallelisms / tailing negations** | "It's not just X, it's Y", "..., no guessing" | State the point directly |
-| 10 | **Rule of three** | "innovation, inspiration, and insights" | Use natural number of items |
-| 11 | **Synonym cycling** | "protagonist... main character... central figure... hero" | "protagonist" (repeat when clearest) |
-| 12 | **False ranges** | "from the Big Bang to dark matter" | List topics directly |
-| 13 | **Passive voice / subjectless fragments** | "No configuration file needed" | Name the actor when it helps clarity |
+- **España:** *vosotros*, pretérito compuesto, *ordenador/móvil*, comillas latinas en texto cuidado.
+- **Latinoamérica (neutro):** *ustedes*, pretérito simple, *computadora/celular*, sin modismos de un solo país.
+- **Internacional neutro (por defecto):** evita a la vez *vosotros* y los regionalismos marcados; vocabulario que se entienda en todas partes.
 
-### Style Patterns
+El skill no fuerza ningún dialecto y nunca mezcla variantes dentro de un mismo texto.
 
-| # | Pattern | Before | After |
-|---|---------|--------|-------|
-| 14 | **Em/en dashes** | "institutions—not the people—yet this continues—" | Cut them: periods, commas, colons, or parentheses |
-| 15 | **Boldface overuse** | "**OKRs**, **KPIs**, **BMC**" | "OKRs, KPIs, BMC" |
-| 16 | **Inline-header lists** | "**Performance:** Performance improved" | Convert to prose |
-| 17 | **Title Case Headings** | "Strategic Negotiations And Partnerships" | "Strategic negotiations and partnerships" |
-| 18 | **Emojis** | "🚀 Launch Phase: 💡 Key Insight:" | Remove emojis |
-| 19 | **Curly quotes** | `said “the project”` | `said “the project”` |
-| 26 | **Hyphenated word pairs** | “cross-functional, data-driven, client-facing” | Drop hyphens on common word pairs |
-| 27 | **Persuasive authority tropes** | "At its core, what matters is..." | State the point directly |
-| 28 | **Signposting announcements** | "Let's dive in", "Here's what you need to know" | Start with the content |
-| 29 | **Fragmented headers** | "## Performance" + "Speed matters." | Let the heading do the work |
-| 30 | **Diff-anchored writing** | "This function was added to replace..." | Describe what it does, not what changed |
-| 31 | **Manufactured punchlines / staccato drama** | "It had no preference. No prior. No nostalgia." | Use varied sentence lengths and concrete claims |
-| 32 | **Aphorism formulas** | "Symmetry is the language of trust" | Replace the formula with the actual claim |
-| 33 | **Conversational rhetorical openers** | "Honestly? It depends..." | Remove the fake-candid setup |
+## Patrones detectados
 
-### Communication Patterns
+25 patrones en 6 bloques (ver `SKILL.md` para cada uno con ejemplos antes/después):
 
-| # | Pattern | Before | After |
-|---|---------|--------|-------|
-| 20 | **Chatbot artifacts** | "I hope this helps! Let me know if..." | Remove entirely |
-| 21 | **Cutoff disclaimers** | "While details are limited in available sources..." | Find sources or remove |
-| 22 | **Sycophantic tone** | "Great question! You're absolutely right!" | Respond directly |
+1. **Léxico** — muletillas de IA · anglicismos y falsos amigos · adjetivos y verbos genéricos · perífrasis para no decir "ser/estar".
+2. **Sintaxis y estructura** — nominalización pesada · cadenas de "que / lo cual" · gerundios de relleno · simetría artificial · conectores inflados.
+3. **Tono y registro** — tono corporativo vacío · marketing hueco · falsa profundidad · sobreexplicación · atribuciones vagas · registro equivocado.
+4. **Estructura del texto** — introducciones de plantilla · cierres moralizantes · ritmo mecánico · encabezados de plantilla.
+5. **Puntuación y formato** — raya al estilo inglés · comillas según variante · mayúsculas de título a la inglesa · exceso de negritas/emojis/listas.
+6. **Artefactos de IA** — artefactos de chatbot y tono servil · avisos de límite de conocimiento y relleno especulativo.
 
-### Filler and Hedging
+## Ejemplos
 
-| # | Pattern | Before | After |
-|---|---------|--------|-------|
-| 23 | **Filler phrases** | "In order to", "Due to the fact that" | "To", "Because" |
-| 24 | **Excessive hedging** | "could potentially possibly" | "may" |
-| 25 | **Generic conclusions** | "The future looks bright" | Specific plans or facts |
+En [`EJEMPLOS.md`](EJEMPLOS.md) hay casos antes/después para cinco registros: corporativo, académico, mensaje casual, explicación técnica y descripción de producto.
 
-## Full Example
+## Decisiones de diseño informadas por la investigación
 
-**Before (AI-sounding):**
-> I recently spent five unforgettable days in Lisbon, and let me tell you — this city completely stole my heart. From the moment I arrived, I knew I was somewhere truly special.
->
-> Nestled along the banks of the Tagus River, Lisbon stands as a vibrant testament to Portugal's enduring spirit, where rich history and modern energy intertwine at every turn. Yes, the famous hills are challenging — my legs certainly felt it! — but every climb rewards you with breathtaking, panoramic views that make it all worthwhile.
->
-> No trip would be complete without riding the iconic Tram 28, winding through the city's most historic neighborhoods. And the food? Simply divine. The original pastéis de nata at Pastéis de Belém are a beloved national treasure, and savoring one still warm was a moment I will never forget.
->
-> But what truly makes Lisbon special isn't just the sights — it's the feeling. Wander a few steps off the main squares and you'll discover a quieter, more authentic side: sun-drenched alleys, charming tiled facades, and friendly locals going about their daily lives, inviting you to slow down and savor every moment.
->
-> Of course, the must-see São Jorge Castle offers stunning views over the rooftops below. The queues can be long, but the experience is absolutely worth it for any history buff or curious traveler.
->
-> Would I go back? Absolutely. Lisbon isn't just a place to visit — it's a place to fall in love with, again and again. If you're dreaming of your next getaway, this is one destination that promises memories to last a lifetime. ✨
+Antes de adaptar el skill se investigó el problema en español, sin dar por hecho que los patrones del inglés sirvieran. Esto es lo que se encontró y cómo dio forma al diseño.
 
-**After (Humanized):**
-> I spent five days in Lisbon last October and still have mixed feelings about it. Beautiful, yes. Also harder on the knees than anyone warned me.
->
-> The hills are the whole story and somehow never make the brochures. My hotel was up in Alfama, which photographs beautifully and translates, in practice, to climbing what felt like a six-story staircase every time I wanted coffee. By the second day my calves had opinions. I started planning each walk around which way was downhill, which is a strange way to see a city but probably an honest one.
->
-> Everyone says to ride Tram 28, so I did, wedged against a stranger's backpack for forty minutes while three tour groups filmed the same corner. I would walk the route next time, or go before breakfast. The custard tarts, though, earn the fuss. I had one at a plain little place in Graça, still warm, and for about thirty seconds I understood why people build trips around pastry.
->
-> What I did not expect was how quiet the city gets away from the main squares. Two blocks uphill from any plaza it turns into laundry lines, chipped tile, open windows, and old men watching football with the sound turned up. That is the Lisbon I keep thinking about, not the castle.
->
-> The castle is fine. The view is great, the queue is long, and I spent more time shuffling toward the entrance than looking at anything once I got inside. If I had only two days, I would trade it for an afternoon of getting lost.
->
-> I would go back, but in spring and with better shoes. Lisbon does not bend over backward to make things easy for you. I think I liked that, even when my legs disagreed.
+**Qué se investigó.** Señales de texto en español generado por IA; *translationese* y calcos sintácticos del inglés; falsos amigos frecuentes (*soportar*, *consistente*, *eventualmente*, *actualmente*); recomendaciones de la RAE y Fundéu sobre raya, comillas y mayúsculas; las diferencias España / Latinoamérica / neutro; los manuales de lenguaje claro de varias administraciones; y cómo se percibe la prosa burocrática o "de consultora".
 
-## References
+**Problemas propios del español que se encontraron.**
+- La raya (—) **es legítima** en español (incisos y diálogos). Copiar la regla inglesa de "córtalas todas" sería un error de adaptación: el tell real es la raya *suelta, con espacios*, usada como el em dash inglés.
+- Las comillas no tienen un único "correcto": «latinas» son la norma editorial en España, las "rectas" dominan en LatAm y en la web. La regla útil es coherencia, no un tipo fijo.
+- El español tiene fallos sintácticos que el inglés no tiene en la misma medida: **nominalización deverbal** ("la realización de un análisis"), cadenas de **"que / lo cual"** y abuso de **gerundio** (incluido el de posterioridad, que además es incorrecto).
+- Las muletillas de IA en español son léxicamente distintas: "es importante destacar", "en este sentido", "sin lugar a dudas", "solución integral", "marcar la diferencia".
+- La variante regional es un eje que en el original no existe y que en español es ineludible.
 
-- [Wikipedia: Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) - Primary source
-- [WikiProject AI Cleanup](https://en.wikipedia.org/wiki/Wikipedia:WikiProject_AI_Cleanup) - Maintaining organization
+**Ideas del Humanizer en inglés que se conservaron.** La arquitectura general (frontmatter + patrones numerados con antes/después); el bucle borrador → auditoría → versión final; la calibración de voz desde muestras; la sección de personalidad para texto con voz; la guía de falsos positivos y de señales humanas; la regla de "reescribe, no recortes"; y la idea de buscar *racimos* de tells, no casos sueltos.
 
-## Version History
+**Ideas del original que se reemplazaron.** El corte total de la raya (sustituido por "úsala a la española"); curvas→rectas en comillas (sustituido por coherencia según variante); el vocabulario AI inglés (*delve*, *tapestry*); y los ejemplos, todos reescritos como texto español nativo, no traducido.
 
-- **2.8.2** - Replaced the full before/after example with a first-person Lisbon trip recap. The after now keeps the same topic, perspective, and rough length as the before while removing the AI tells without becoming clipped or slogan-like. No change to the 33 patterns.
-- **2.8.1** - Added cross-agent installation docs, optional Claude Code plugin packaging, and a compact secondhand-text false-positive guard. No change to the 33 patterns.
-- **2.8.0** - Added style/cadence patterns #31-33 for manufactured punchlines, aphorism formulas, and conversational rhetorical openers; expanded #20 to catch offer-to-continue chatbot closers. 33 patterns total.
-- **2.7.0** - Added pattern #30 (diff-anchored writing); made em/en dashes a hard cut rather than "overuse"; expanded #21 to cover speculative gap-filling ("maintains a low profile"). 30 patterns total.
-- **2.6.0** - Cleanup pass: consolidated the duplicated workflow sections, gated the personality guidance to content where voice is wanted, removed the model-fingerprinting subsection, and condensed the worked example. No change to the 29 patterns.
-- **2.5.1** - Added a passive-voice / subjectless-fragment rule, raising the total to 29 patterns
-- **2.5.0** - Added patterns for persuasive framing, signposting, and fragmented headers; expanded negative parallelisms to cover tailing negations; tightened wording around em dash overuse; fixed frontmatter wording to use "filler phrases"
-- **2.4.0** - Added voice calibration: match the user's personal writing style from samples
-- **2.3.0** - Added pattern #25: hyphenated word pair overuse
-- **2.2.0** - Added a final "obviously AI generated" audit + second-pass rewrite prompts
-- **2.1.1** - Fixed pattern #18 example (curly quotes vs straight quotes)
-- **2.1.0** - Added before/after examples for all 24 patterns
-- **2.0.0** - Complete rewrite based on raw Wikipedia article content
-- **1.0.0** - Initial release
+**Categorías nuevas, propias del español.** Anglicismos y falsos amigos; nominalización pesada; cadenas de "que / lo cual"; gerundios de relleno; perífrasis para evitar "ser/estar"; tono corporativo involuntario; manejo de variante (España / LatAm / neutro); y una tabla de siete registros con reglas propias.
 
-## License
+**Límites y dudas abiertas.** El "neutro" es una convención, no una variante que nadie hable; el skill lo usa por defecto pero avisa de ello. La frontera entre un anglicismo ya asentado (*software*, *online*) y uno evitable (*soportar*, *librería*) depende del campo y evoluciona. Y, como en el original, la detección funciona mejor con racimos de señales que con tells aislados: aplicado con mano dura, puede aplanar prosa humana legítima.
 
-MIT
+## Relación con el proyecto original
+
+Adaptación al español de [blader/humanizer](https://github.com/blader/humanizer), que a su vez se basa en [Wikipedia: Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) de WikiProject AI Cleanup. Se conserva la licencia MIT y la atribución al autor original.
+
+## Historial de versiones
+
+- **1.0.0** — Primera versión de la adaptación al español. Skill reescrito desde cero como `humanizer-es`: 25 patrones en 6 bloques pensados para el español generado por IA, manejo de variantes (España / LatAm / neutro), tabla de registros, niveles de intensidad, calibración de voz, ejemplo completo y lista de control. No es una traducción del original en inglés.
+
+## Licencia
+
+MIT. Ver [LICENSE](LICENSE).

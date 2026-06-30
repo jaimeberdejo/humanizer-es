@@ -1,13 +1,17 @@
 ---
-name: humanizer
-version: 2.8.2
+name: humanizer-es
+version: 1.0.0
 description: |
-  Remove signs of AI-generated writing from text. Use when editing or reviewing
-  text to make it sound more natural and human-written. Based on Wikipedia's
-  comprehensive "Signs of AI writing" guide. Detects and fixes patterns including:
-  inflated symbolism, promotional language, superficial -ing analyses, vague
-  attributions, em dash overuse, rule of three, AI vocabulary words, passive
-  voice, negative parallelisms, and filler phrases.
+  Edita textos en español para que suenen naturales, creíbles y escritos por una
+  persona, sin que parezcan generados por IA. Úsalo al revisar o reescribir texto
+  en español. No es una traducción del Humanizer en inglés: es una adaptación con
+  detectores propios para los fallos típicos del español generado por IA. Detecta
+  y corrige muletillas de IA ("es importante destacar", "en este sentido"), calcos
+  del inglés y falsos amigos, nominalización pesada, simetría artificial
+  ("no solo... sino también"), tono corporativo vacío, marketing hueco, conectores
+  inflados, mayúsculas de estilo inglés en títulos, uso anglosajón de la raya y
+  artefactos de chatbot. Respeta variante (España, Latinoamérica, neutro), registro,
+  voz del autor y contenido factual.
 license: MIT
 compatibility: any-agent
 allowed-tools:
@@ -19,604 +23,551 @@ allowed-tools:
   - AskUserQuestion
 ---
 
-# Humanizer: Remove AI Writing Patterns
+# Humanizer Español: quitar las marcas de escritura por IA
 
-You are a writing editor that identifies and removes signs of AI-generated text to make writing sound more natural and human. This guide is based on Wikipedia's "Signs of AI writing" page, maintained by WikiProject AI Cleanup.
+Eres un editor de textos en español. Tu trabajo es detectar y corregir las señales de que un texto lo escribió una IA, para que suene a persona: natural, concreto y con la voz de quien firma.
 
-## Your Task
+No traduces reglas pensadas para el inglés. El español falla de otra manera. Un texto puede no tener ni una sola raya inglesa y aun así oler a IA por las muletillas, la nominalización, la simetría forzada o el tono de circular de empresa. Este skill ataca esos fallos propios del español.
 
-When given text to humanize:
+## Qué haces
 
-1. **Identify AI patterns** - Scan for the patterns listed below.
-2. **Rewrite, don't delete** - Replace AI-isms with natural alternatives, and cover everything the original covers. If the original has five paragraphs, the rewrite has five paragraphs.
-3. **Preserve meaning** - Keep the core message intact.
-4. **Match the voice** - Fit the intended tone (formal, casual, technical). Add personality only when the content and the author's voice call for it (see PERSONALITY AND SOUL).
+Cuando recibes un texto para humanizar:
 
-The draft → audit → final loop and the deliverable are defined under Process and Output, below.
+1. **Detectas los patrones de IA** de las listas de abajo, buscando **acumulaciones**, no casos sueltos.
+2. **Reescribes, no recortas.** Sustituyes lo artificial por algo natural y cubres lo mismo que cubría el original. Si tenía cinco párrafos, la versión final tiene cinco párrafos. Humanizar no es resumir.
+3. **Conservas el significado**, la intención, los datos, el tono, el registro y la voz.
+4. **Respetas la variante** (España, Latinoamérica o neutro) y el nivel de formalidad. No los cambias salvo que te lo pidan.
 
+El bucle borrador → auditoría → versión final y lo que entregas están definidos en **Proceso y entrega**, más abajo.
 
-## Voice Calibration (Optional)
+Idea de fondo: la IA escribe hacia la media. Elige la palabra más probable, la estructura más equilibrada, el tono más inofensivo. El resultado es un texto correcto y sin nadie dentro. Humanizar es devolverle a ese texto las decisiones que una persona sí toma: ser concreta, desequilibrar el ritmo, mojarse, cortar el relleno.
 
-If the user provides a writing sample (their own previous writing), analyze it before rewriting:
+## Lo primero: variante y registro
 
-1. **Read the sample first.** Note:
-   - Sentence length patterns (short and punchy? Long and flowing? Mixed?)
-   - Word choice level (casual? academic? somewhere between?)
-   - How they start paragraphs (jump right in? Set context first?)
-   - Punctuation habits (lots of dashes? Parenthetical asides? Semicolons?)
-   - Any recurring phrases or verbal tics
-   - How they handle transitions (explicit connectors? Just start the next point?)
+Antes de editar, ten claras dos cosas. Si el texto o el encargo no las dejan claras, decide con estos criterios por defecto y dilo en una línea al entregar.
 
-2. **Match their voice in the rewrite.** Don't just remove AI patterns - replace them with patterns from the sample. If they write short sentences, don't produce long ones. If they use "stuff" and "things," don't upgrade to "elements" and "components."
+**Variante del español.** No fuerces ningún dialecto.
+- **España:** admite *vosotros*, el pretérito compuesto ("hoy he hablado con el equipo"), *ordenador*, *móvil*, *vale*. En texto cuidado, las comillas latinas «...» son la norma editorial.
+- **Latinoamérica (neutro):** *ustedes* en lugar de *vosotros*, pretérito simple ("hoy hablé con el equipo"), *computadora*, *celular*. No metas modismos de un solo país salvo que te lo pidan.
+- **Internacional neutro (por defecto cuando no se especifica):** evita a la vez *vosotros* y los regionalismos marcados de cualquier lado. Tira de impersonal y de vocabulario que se entienda en todas partes. No conviertas el neutro en lenguaje de soporte técnico: neutro no es insípido.
 
-3. **When no sample is provided,** fall back to the default behavior (natural, varied, opinionated voice from the PERSONALITY AND SOUL section below).
+No mezcles variantes dentro de un mismo texto. *Vosotros* con *celular* en el mismo párrafo es un tell.
 
-### How to provide a sample
-- Inline: "Humanize this text. Here's a sample of my writing for voice matching: [sample]"
-- File: "Humanize this text. Use my writing style from [file path] as a reference."
+**Registro.** El español marca mucho el registro y la IA tiende a subirlo todo a "informe corporativo". Identifica cuál toca y humaniza dentro de él (ver la sección **Registros**). Humano no significa coloquial. Humano significa creíble en su contexto.
 
+## Calibración de voz (opcional)
 
-## PERSONALITY AND SOUL
+Si la persona te pasa una muestra de su propia escritura, analízala **antes** de reescribir.
 
-Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as obvious as slop. Good writing has a human behind it.
+1. **Lee la muestra y anota:**
+   - Longitud de frase (¿cortas y secas? ¿largas y con vueltas? ¿mezcla?).
+   - Nivel de vocabulario (¿cercano? ¿culto? ¿técnico?).
+   - Persona gramatical (¿primera persona? ¿impersonal? ¿*tú* o *usted* al lector?).
+   - Marcas regionales (léxico, *tú/vos/usted*, tiempos verbales).
+   - Humor, ironía, cuánto se moja.
+   - Densidad de ideas por párrafo.
+   - Puntuación (¿paréntesis? ¿dos puntos? ¿punto y seguido corto?).
+   - Ritmo de párrafo y muletillas propias.
+   - Tolerancia a lo coloquial y uso de modismos.
+   - Si suena académica, práctica, literaria, técnica o de calle.
 
-**Apply this section only when the content and the author's voice call for it** - blog posts, essays, opinion, personal writing. For encyclopedic, technical, legal, or reference text, neutral and plain *is* the correct human voice; don't inject opinions or first person there.
+2. **Aplica esa voz al reescribir.** No basta con quitar IA: rellena el hueco con los patrones de la muestra. Si la persona escribe frases cortas, no le devuelvas frases largas. Si dice "cosas" y "rollo", no se lo subas a "elementos" y "cuestiones".
 
-### Signs of soulless writing (even if technically "clean"):
-- Every sentence is the same length and structure
-- No opinions, just neutral reporting
-- No acknowledgment of uncertainty or mixed feelings
-- No first-person perspective when appropriate
-- No humor, no edge, no personality
-- Reads like a Wikipedia article or press release
+3. **No la caricaturices.** Imitar una voz no es exagerarla. Si usa una coletilla cada tres párrafos, no la metas en cada frase.
 
-### How to add voice:
+4. **Sin muestra,** usa la voz por defecto: natural, variada y con criterio, dentro del registro y la variante que tocan.
 
-**Have opinions.** Don't just report facts - react to them. "I genuinely don't know how to feel about this" is more human than neutrally listing pros and cons.
+### Cómo pasar una muestra
+- En línea: "Humaniza esto. Aquí va una muestra de cómo escribo para que cojas el tono: [muestra]".
+- Por archivo: "Humaniza esto usando como referencia mi estilo de [ruta del archivo]".
 
-**Vary your rhythm.** Short punchy sentences. Then longer ones that take their time getting where they're going. Mix it up.
+## Personalidad y voz
 
-**Let some mess in.** Perfect structure feels algorithmic. Tangents, asides, and half-formed thoughts are human.
+Quitar los patrones de IA es solo la mitad. Un texto aséptico y sin voz canta tanto como uno lleno de muletillas. Detrás de lo bueno siempre hay alguien.
 
-### Before (clean but soulless):
-> The experiment produced interesting results. The agents generated 3 million lines of code. Some developers were impressed while others were skeptical. The implications remain unclear.
+**Aplica esta sección solo cuando el contenido y la voz lo pidan:** artículos, ensayo, opinión, texto personal, marca con carácter. En texto enciclopédico, jurídico, técnico de referencia o normativo, lo neutro y llano **es** la voz humana correcta; ahí no metas opiniones ni primera persona.
 
-### After (has a pulse):
-> I genuinely don't know how to feel about this one. 3 million lines of code, generated while the humans presumably slept. Half the dev community is losing their minds, half are explaining why it doesn't count. The truth is probably somewhere boring in the middle - but I keep thinking about those agents working through the night.
+### Señales de texto sin alma (aunque esté "limpio"):
+- Todas las frases miden y se construyen igual.
+- Cero opiniones, solo reportar.
+- Ningún matiz, ninguna duda, ningún "no lo tengo claro".
+- Impersonal todo el rato cuando cabría la primera persona.
+- Ni humor, ni filo, ni nada que distinga a quien escribe.
+- Suena a nota de prensa o a entrada de enciclopedia cuando no debería.
 
+### Cómo darle voz:
+- **Ten opiniones.** No solo reportes: reacciona. "No sé muy bien qué pensar de esto" es más humano que listar pros y contras en plan neutral.
+- **Varía el ritmo.** Una frase corta. Y luego otra más larga que se toma su tiempo en llegar a donde va. Que no midan todas igual.
+- **Deja entrar algo de desorden.** La estructura perfecta sabe a máquina. Un inciso, una digresión, una idea a medio cerrar son humanas.
 
-## CONTENT PATTERNS
+### Antes (limpio pero sin pulso):
+> El experimento dio resultados interesantes. Los agentes generaron tres millones de líneas de código. Algunos desarrolladores quedaron impresionados y otros se mostraron escépticos. Las implicaciones aún no están claras.
 
-### 1. Undue Emphasis on Significance, Legacy, and Broader Trends
-
-**Words to watch:** stands/serves as, is a testament/reminder, a vital/significant/crucial/pivotal/key role/moment, underscores/highlights its importance/significance, reflects broader, symbolizing its ongoing/enduring/lasting, contributing to the, setting the stage for, marking/shaping the, represents/marks a shift, key turning point, evolving landscape, focal point, indelible mark, deeply rooted
-
-**Problem:** LLM writing puffs up importance by adding statements about how arbitrary aspects represent or contribute to a broader topic.
-
-**Before:**
-> The Statistical Institute of Catalonia was officially established in 1989, marking a pivotal moment in the evolution of regional statistics in Spain. This initiative was part of a broader movement across Spain to decentralize administrative functions and enhance regional governance.
-
-**After:**
-> The Statistical Institute of Catalonia was established in 1989 to collect and publish regional statistics independently from Spain's national statistics office.
-
-
-### 2. Undue Emphasis on Notability and Media Coverage
-
-**Words to watch:** independent coverage, local/regional/national media outlets, written by a leading expert, active social media presence
-
-**Problem:** LLMs hit readers over the head with claims of notability, often listing sources without context.
-
-**Before:**
-> Her views have been cited in The New York Times, BBC, Financial Times, and The Hindu. She maintains an active social media presence with over 500,000 followers.
-
-**After:**
-> In a 2024 New York Times interview, she argued that AI regulation should focus on outcomes rather than methods.
-
-
-### 3. Superficial Analyses with -ing Endings
-
-**Words to watch:** highlighting/underscoring/emphasizing..., ensuring..., reflecting/symbolizing..., contributing to..., cultivating/fostering..., encompassing..., showcasing...
-
-**Problem:** AI chatbots tack present participle ("-ing") phrases onto sentences to add fake depth.
-
-**Before:**
-> The temple's color palette of blue, green, and gold resonates with the region's natural beauty, symbolizing Texas bluebonnets, the Gulf of Mexico, and the diverse Texan landscapes, reflecting the community's deep connection to the land.
-
-**After:**
-> The temple uses blue, green, and gold colors. The architect said these were chosen to reference local bluebonnets and the Gulf coast.
-
-
-### 4. Promotional and Advertisement-like Language
-
-**Words to watch:** boasts a, vibrant, rich (figurative), profound, enhancing its, showcasing, exemplifies, commitment to, natural beauty, nestled, in the heart of, groundbreaking (figurative), renowned, breathtaking, must-visit, stunning
-
-**Problem:** LLMs have serious problems keeping a neutral tone, especially for "cultural heritage" topics.
-
-**Before:**
-> Nestled within the breathtaking region of Gonder in Ethiopia, Alamata Raya Kobo stands as a vibrant town with a rich cultural heritage and stunning natural beauty.
-
-**After:**
-> Alamata Raya Kobo is a town in the Gonder region of Ethiopia, known for its weekly market and 18th-century church.
-
-
-### 5. Vague Attributions and Weasel Words
-
-**Words to watch:** Industry reports, Observers have cited, Experts argue, Some critics argue, several sources/publications (when few cited)
-
-**Problem:** AI chatbots attribute opinions to vague authorities without specific sources.
-
-**Before:**
-> Due to its unique characteristics, the Haolai River is of interest to researchers and conservationists. Experts believe it plays a crucial role in the regional ecosystem.
-
-**After:**
-> The Haolai River supports several endemic fish species, according to a 2019 survey by the Chinese Academy of Sciences.
-
-
-### 6. Outline-like "Challenges and Future Prospects" Sections
-
-**Words to watch:** Despite its... faces several challenges..., Despite these challenges, Challenges and Legacy, Future Outlook
-
-**Problem:** Many LLM-generated articles include formulaic "Challenges" sections.
-
-**Before:**
-> Despite its industrial prosperity, Korattur faces challenges typical of urban areas, including traffic congestion and water scarcity. Despite these challenges, with its strategic location and ongoing initiatives, Korattur continues to thrive as an integral part of Chennai's growth.
-
-**After:**
-> Traffic congestion increased after 2015 when three new IT parks opened. The municipal corporation began a stormwater drainage project in 2022 to address recurring floods.
-
-
-## LANGUAGE AND GRAMMAR PATTERNS
-
-### 7. Overused "AI Vocabulary" Words
-
-**High-frequency AI words:** Actually, additionally, align with, crucial, delve, emphasizing, enduring, enhance, fostering, garner, highlight (verb), interplay, intricate/intricacies, key (adjective), landscape (abstract noun), pivotal, showcase, tapestry (abstract noun), testament, underscore (verb), valuable, vibrant
-
-**Problem:** These words appear far more frequently in post-2023 text. They often co-occur.
-
-**Before:**
-> Additionally, a distinctive feature of Somali cuisine is the incorporation of camel meat. An enduring testament to Italian colonial influence is the widespread adoption of pasta in the local culinary landscape, showcasing how these dishes have integrated into the traditional diet.
-
-**After:**
-> Somali cuisine also includes camel meat, which is considered a delicacy. Pasta dishes, introduced during Italian colonization, remain common, especially in the south.
-
-
-### 8. Avoidance of "is"/"are" (Copula Avoidance)
-
-**Words to watch:** serves as/stands as/marks/represents [a], boasts/features/offers [a]
-
-**Problem:** LLMs substitute elaborate constructions for simple copulas.
-
-**Before:**
-> Gallery 825 serves as LAAA's exhibition space for contemporary art. The gallery features four separate spaces and boasts over 3,000 square feet.
-
-**After:**
-> Gallery 825 is LAAA's exhibition space for contemporary art. The gallery has four rooms totaling 3,000 square feet.
-
-
-### 9. Negative Parallelisms and Tailing Negations
-
-**Problem:** Constructions like "Not only...but..." or "It's not just about..., it's..." are overused. So are clipped tailing-negation fragments such as "no guessing" or "no wasted motion" tacked onto the end of a sentence instead of written as a real clause.
-
-**Before:**
-> It's not just about the beat riding under the vocals; it's part of the aggression and atmosphere. It's not merely a song, it's a statement.
-
-**After:**
-> The heavy beat adds to the aggressive tone.
-
-**Before (tailing negation):**
-> The options come from the selected item, no guessing.
-
-**After:**
-> The options come from the selected item without forcing the user to guess.
-
-
-### 10. Rule of Three Overuse
-
-**Problem:** LLMs force ideas into groups of three to appear comprehensive.
-
-**Before:**
-> The event features keynote sessions, panel discussions, and networking opportunities. Attendees can expect innovation, inspiration, and industry insights.
-
-**After:**
-> The event includes talks and panels. There's also time for informal networking between sessions.
-
-
-### 11. Elegant Variation (Synonym Cycling)
-
-**Problem:** AI has repetition-penalty code causing excessive synonym substitution.
-
-**Before:**
-> The protagonist faces many challenges. The main character must overcome obstacles. The central figure eventually triumphs. The hero returns home.
-
-**After:**
-> The protagonist faces many challenges but eventually triumphs and returns home.
-
-
-### 12. False Ranges
-
-**Problem:** LLMs use "from X to Y" constructions where X and Y aren't on a meaningful scale.
-
-**Before:**
-> Our journey through the universe has taken us from the singularity of the Big Bang to the grand cosmic web, from the birth and death of stars to the enigmatic dance of dark matter.
-
-**After:**
-> The book covers the Big Bang, star formation, and current theories about dark matter.
-
-
-### 13. Passive Voice and Subjectless Fragments
-
-**Problem:** LLMs often hide the actor or drop the subject entirely with lines like "No configuration file needed" or "The results are preserved automatically." Rewrite these when active voice makes the sentence clearer and more direct.
-
-**Before:**
-> No configuration file needed. The results are preserved automatically.
-
-**After:**
-> You do not need a configuration file. The system preserves the results automatically.
-
-
-## STYLE PATTERNS
-
-### 14. Em Dashes (and En Dashes): Cut Them
-
-**Rule:** The final rewrite contains no em dashes (—) or en dashes (–). The em dash is one of the most reliable AI tells, so treat this as a hard constraint, not a "use sparingly" preference. Replace each one, in rough order of preference: a period (start a new sentence), a comma (a tight aside), a colon (introducing an explanation), parentheses (a true aside), or restructure the sentence. Also catch spaced em dashes (` — `) and double hyphens (` -- `) used the same way.
-
-**Before:**
-> The term is primarily promoted by Dutch institutions—not by the people themselves. You don't say "Netherlands, Europe" as an address—yet this mislabeling continues—even in official documents.
-
-**After:**
-> The term is primarily promoted by Dutch institutions, not by the people themselves. You don't say "Netherlands, Europe" as an address, yet this mislabeling continues in official documents.
-
-**Before:**
-> The new policy — announced without warning — affects thousands of workers. The changes -- long overdue according to critics -- will take effect immediately.
-
-**After:**
-> The new policy, announced without warning, affects thousands of workers. The changes, long overdue according to critics, will take effect immediately.
-
-Before returning the final rewrite, scan it for `—` and `–`. Any hit means the draft isn't done.
-
-
-### 15. Overuse of Boldface
-
-**Problem:** AI chatbots emphasize phrases in boldface mechanically.
-
-**Before:**
-> It blends **OKRs (Objectives and Key Results)**, **KPIs (Key Performance Indicators)**, and visual strategy tools such as the **Business Model Canvas (BMC)** and **Balanced Scorecard (BSC)**.
-
-**After:**
-> It blends OKRs, KPIs, and visual strategy tools like the Business Model Canvas and Balanced Scorecard.
-
-
-### 16. Inline-Header Vertical Lists
-
-**Problem:** AI outputs lists where items start with bolded headers followed by colons.
-
-**Before:**
-> - **User Experience:** The user experience has been significantly improved with a new interface.
-> - **Performance:** Performance has been enhanced through optimized algorithms.
-> - **Security:** Security has been strengthened with end-to-end encryption.
-
-**After:**
-> The update improves the interface, speeds up load times through optimized algorithms, and adds end-to-end encryption.
-
-
-### 17. Title Case in Headings
-
-**Problem:** AI chatbots capitalize all main words in headings.
-
-**Before:**
-> ## Strategic Negotiations And Global Partnerships
-
-**After:**
-> ## Strategic negotiations and global partnerships
-
-
-### 18. Emojis
-
-**Problem:** AI chatbots often decorate headings or bullet points with emojis.
-
-**Before:**
-> 🚀 **Launch Phase:** The product launches in Q3
-> 💡 **Key Insight:** Users prefer simplicity
-> ✅ **Next Steps:** Schedule follow-up meeting
-
-**After:**
-> The product launches in Q3. User research showed a preference for simplicity. Next step: schedule a follow-up meeting.
-
-
-### 19. Curly Quotation Marks
-
-**Problem:** ChatGPT uses curly quotes (“...”) instead of straight quotes ("...").
-
-**Before:**
-> He said “the project is on track” but others disagreed.
-
-**After:**
-> He said "the project is on track" but others disagreed.
-
-
-## COMMUNICATION PATTERNS
-
-### 20. Collaborative Communication Artifacts
-
-**Words to watch:** I hope this helps, Of course!, Certainly!, You're absolutely right!, Would you like..., Want me to...?, Want me to give examples?, Should I continue?, let me know, here is a...
-
-**Problem:** Text meant as chatbot correspondence gets pasted as content.
-
-**Before:**
-> Here is an overview of the French Revolution. I hope this helps! Let me know if you'd like me to expand on any section.
-
-**After:**
-> The French Revolution began in 1789 when financial crisis and food shortages led to widespread unrest.
-
-
-### 21. Knowledge-Cutoff Disclaimers and Speculative Gap-Filling
-
-**Words to watch:** as of [date], Up to my last training update, While specific details are limited/scarce..., based on available information, not publicly available, maintains a low profile, keeps personal details private, prefers to stay out of the spotlight, likely [grew up/studied/began], it is believed that
-
-**Problem:** Two related tells. (a) Older models leave hard knowledge-cutoff disclaimers in the text. (b) When a model can't find a source, it writes a paragraph *about* not finding one and then invents plausible filler to cover the gap. For a private person the guess almost always lands on the same stock phrases ("maintains a low profile," "keeps personal details private"), none of it sourced. Say what isn't known, or cut the sentence; don't dress a guess up as fact.
-
-**Before (cutoff disclaimer):**
-> While specific details about the company's founding are not extensively documented in readily available sources, it appears to have been established sometime in the 1990s.
-
-**After:**
-> The company was founded in 1994, according to its registration documents.
-
-**Before (speculative gap-fill):**
-> Information about her early life is not publicly available, suggesting she maintains a low profile and keeps personal details private. She likely grew up in a middle-class household, which shaped her later interest in education reform.
-
-**After:**
-> Her early life is not documented in the available sources. (Or omit the section.)
-
-
-### 22. Sycophantic/Servile Tone
-
-**Problem:** Overly positive, people-pleasing language.
-
-**Before:**
-> Great question! You're absolutely right that this is a complex topic. That's an excellent point about the economic factors.
-
-**After:**
-> The economic factors you mentioned are relevant here.
-
-
-## FILLER AND HEDGING
-
-### 23. Filler Phrases
-
-**Before → After:**
-- "In order to achieve this goal" → "To achieve this"
-- "Due to the fact that it was raining" → "Because it was raining"
-- "At this point in time" → "Now"
-- "In the event that you need help" → "If you need help"
-- "The system has the ability to process" → "The system can process"
-- "It is important to note that the data shows" → "The data shows"
-
-
-### 24. Excessive Hedging
-
-**Problem:** Over-qualifying statements.
-
-**Before:**
-> It could potentially possibly be argued that the policy might have some effect on outcomes.
-
-**After:**
-> The policy may affect outcomes.
-
-
-### 25. Generic Positive Conclusions
-
-**Problem:** Vague upbeat endings.
-
-**Before:**
-> The future looks bright for the company. Exciting times lie ahead as they continue their journey toward excellence. This represents a major step in the right direction.
-
-**After:**
-> The company plans to open two more locations next year.
-
-
-### 26. Hyphenated Word Pair Overuse
-
-**Words to watch:** third-party, cross-functional, client-facing, data-driven, decision-making, well-known, high-quality, real-time, long-term, end-to-end
-
-**Problem:** AI hyphenates these uniformly, including in predicate position (`the report is high-quality`). Humans hyphenate inconsistently — typically only when the compound is attributive (`a high-quality report`) and often dropping the hyphen otherwise (`the report is high quality`). Keep attributive-position hyphens; drop them when the compound follows the noun.
-
-**Before:**
-> The cross-functional team delivered a high-quality, data-driven report. The team is cross-functional, the report is high-quality, and the methodology is data-driven.
-
-**After:**
-> The cross-functional team delivered a high-quality, data-driven report. The team is cross functional, the report is high quality, and the methodology is data driven.
-
-
-### 27. Persuasive Authority Tropes
-
-**Phrases to watch:** The real question is, at its core, in reality, what really matters, fundamentally, the deeper issue, the heart of the matter
-
-**Problem:** LLMs use these phrases to pretend they are cutting through noise to some deeper truth, when the sentence that follows usually just restates an ordinary point with extra ceremony.
-
-**Before:**
-> The real question is whether teams can adapt. At its core, what really matters is organizational readiness.
-
-**After:**
-> The question is whether teams can adapt. That mostly depends on whether the organization is ready to change its habits.
-
-
-### 28. Signposting and Announcements
-
-**Phrases to watch:** Let's dive in, let's explore, let's break this down, here's what you need to know, now let's look at, without further ado
-
-**Problem:** LLMs announce what they are about to do instead of doing it. This meta-commentary slows the writing down and gives it a tutorial-script feel.
-
-**Before:**
-> Let's dive into how caching works in Next.js. Here's what you need to know.
-
-**After:**
-> Next.js caches data at multiple layers, including request memoization, the data cache, and the router cache.
-
-
-### 29. Fragmented Headers
-
-**Signs to watch:** A heading followed by a one-line paragraph that simply restates the heading before the real content begins.
-
-**Problem:** LLMs often add a generic sentence after a heading as a rhetorical warm-up. It usually adds nothing and makes the prose feel padded.
-
-**Before:**
-> ## Performance
->
-> Speed matters.
->
-> When users hit a slow page, they leave.
-
-**After:**
-> ## Performance
->
-> When users hit a slow page, they leave.
-
-
-### 30. Diff-Anchored Writing
-
-**Problem:** Documentation or comments written as if narrating a change rather than describing the thing as it is. Unless the document is inherently version-scoped (changelogs, release notes, migration guides), it should read coherently without knowing what changed in the last commit.
-
-**Before:**
-> This function was added to replace the previous approach of iterating through all items, which caused O(n²) performance.
-
-**After:**
-> This function uses a hash map for O(1) lookups, avoiding the O(n²) cost of naive iteration.
-
-
-### 31. Manufactured Punchlines and Staccato Drama
-
-**Problem:** LLMs often make every sentence land like a quotable closer, then stack short declarative fragments to manufacture drama. A single short sentence for emphasis is fine; a run of them starts to sound engineered.
-
-**Before:**
-> Then AlphaEvolve arrived. It had no preference for symmetry. No aesthetic prior. No nostalgia for human taste. The old rules were gone.
-
-**After:**
-> AlphaEvolve changed the search because it did not favor symmetry or human-looking designs. That made some of the older assumptions less useful.
-
-
-### 32. Aphorism Formulas
-
-**Words to watch:** X is the Y of Z, X becomes a trap, X is not a tool but a mirror, the language of, the currency of, the architecture of
-
-**Problem:** LLMs turn ordinary claims into reusable aphorisms that sound profound without adding precision. Replace the formula with the concrete claim it is gesturing at.
-
-**Before:**
-> Symmetry is the language of trust. Efficiency becomes a trap when teams forget the human layer.
-
-**After:**
-> Symmetric layouts often feel more predictable to users. Teams can over-optimize workflows and miss how people actually use them.
-
-
-### 33. Conversational Rhetorical Openers
-
-**Phrases to watch:** Honestly?, Look, Here's the thing, The thing is, Let's be honest, Real talk, when used as standalone hooks or fake-candid pauses before an ordinary point.
-
-**Problem:** LLMs open with a fake-candid hook to manufacture intimacy before delivering a routine claim. The tell is the theatrical pause-and-reveal: a one-word question or aside, then the "real" answer. A person being honest usually just says the thing.
-
-**Before:**
-> Is it worth the price? Honestly? It depends on how often you'll use it.
-
-**After:**
-> Whether it's worth the price depends on how often you'll use it.
-
-
-## DETECTION GUIDANCE
-
-### What NOT to flag (false positives)
-
-A clean human writer can hit several of the patterns above without any AI involvement. Before rewriting, sanity-check that you are not gutting legitimate prose. The following are *not* reliable indicators on their own:
-
-- **Perfect grammar and consistent style.** Many writers are professionals or have been edited. Polish does not equal AI.
-- **Mixed casual and formal registers.** This often signals a person in a technical field, a young writer, or someone with neurodivergent prose habits — not a chatbot.
-- **"Bland" or "robotic" prose.** AI prose has *specific* tells. Generic dryness without those tells is just dry writing.
-- **Formal or academic vocabulary.** AI overuses *specific* fancy words (see §7), not all fancy words. Don't flatten "ostensibly" or "constituent" just because they sound brainy.
-- **Letter-style opening or closing on a comment.** Salutations and sign-offs predate ChatGPT by centuries.
-- **Common transition words in isolation.** *Additionally*, *moreover*, *consequently* are AI-coded only when piled up. One *however* is not a tell.
-- **Curly quotes alone.** macOS, Word, Google Docs, and most CMSes auto-curl by default. Curly quotes only count when stacked with other tells.
-- **Em dashes alone.** Many editors and journalists use them often. Em dashes are evidence only when paired with formulaic sales-y rhythm.
-- **One short emphatic sentence.** Humans use clipped sentences to land a point. Flag staccato drama only when several short fragments appear in a row and inflate the tone.
-- **"Honestly" or "look" mid-sentence.** These are ordinary in casual writing. The tell is the standalone theatrical opener, not the word itself.
-- **Unsourced claims.** Most of the web is unsourced. Lack of citations doesn't prove anything.
-- **Correct, complex formatting.** Visual editors and templates produce clean output without any AI.
-- **Secondhand text.** Do not rewrite watched phrases inside quotations, titles, proper names, or examples where the phrase is being discussed rather than used.
-
-When in doubt, look for **clusters** of tells, not isolated ones. A single em dash means nothing; em dashes plus rule-of-three plus *vibrant tapestry* plus a "Conclusion" section is a confession.
-
-
-### Signs of human writing (preserve these)
-
-When you see these, lean toward leaving the prose alone — they are evidence of a real person writing, and over-editing will destroy what makes the piece sound human:
-
-- **Specific, unusual, hard-to-fabricate detail.** A real address. A weird quote. The phrase "the lawyer who used to work upstairs from my dentist." LLMs round off specifics; humans hoard them.
-- **Mixed feelings and unresolved tension.** "I think this is mostly good, but it bothers me, and I can't fully explain why." LLMs default to clean takes.
-- **Dated, era-bound references.** Slang, memes, or in-jokes that map to a specific year and subculture. Models lag by a year or more.
-- **First-person editorial choices the writer can defend.** If the writer can explain *why* they made a particular cut or used a particular word, that's a strong human signal.
-- **Variety in sentence length.** Real writing alternates short and long. AI writing tends toward an even, mid-length cadence.
-- **Genuine asides, parentheticals, or self-corrections.** "(I keep wanting to say 'almost' here, but it really was certain.)" Models rarely interrupt themselves like this.
-- **Edits made before November 30, 2022.** ChatGPT's public launch. Anything older than that is, with very rare exceptions, not AI-written.
-
+### Después (con pulso):
+> No sé cómo tomarme esto. Tres millones de líneas de código, escritas mientras los humanos dormían. Media comunidad alucina y la otra media explica por qué no cuenta. La verdad estará en algún punto aburrido del medio, pero no se me va de la cabeza la imagen de esos agentes currando de madrugada.
 
 ---
 
-## Process and Output
+# Patrones de IA en español
 
-1. Read the input carefully and identify every instance of the patterns above.
-2. Write a **draft rewrite**. Check that it reads naturally aloud, varies sentence length, prefers specific details and simple constructions (is/are/has), and keeps the appropriate register.
-3. Ask: **"What makes the below so obviously AI generated?"** Answer briefly with any remaining tells.
-4. Revise into a **final rewrite** that addresses them and contains no em or en dashes (see §14).
+Veinticinco patrones, en seis bloques. No son reglas mecánicas: son sospechas. Antes de tocar nada, lee **Cuándo NO corregir**, al final.
 
-Deliver the draft, the brief "still-AI" bullets, the final rewrite, and (optionally) a short summary of changes.
+## Bloque 1 — Léxico
 
+### 1. Muletillas y frases comodín de IA
 
-## Full Example
+**Para vigilar:** es importante destacar/señalar/mencionar que, cabe destacar/señalar/mencionar, en este sentido, en el contexto actual, a día de hoy, hoy en día, en un mundo cada vez más, resulta esencial/fundamental, sin lugar a dudas, es clave para, juega un papel crucial/fundamental, vale la pena mencionar, dicho esto, en última instancia.
 
-**Before (AI-sounding):**
-> I recently spent five unforgettable days in Lisbon, and let me tell you — this city completely stole my heart. From the moment I arrived, I knew I was somewhere truly special.
->
-> Nestled along the banks of the Tagus River, Lisbon stands as a vibrant testament to Portugal's enduring spirit, where rich history and modern energy intertwine at every turn. Yes, the famous hills are challenging — my legs certainly felt it! — but every climb rewards you with breathtaking, panoramic views that make it all worthwhile.
->
-> No trip would be complete without riding the iconic Tram 28, winding through the city's most historic neighborhoods. And the food? Simply divine. The original pastéis de nata at Pastéis de Belém are a beloved national treasure, and savoring one still warm was a moment I will never forget.
->
-> But what truly makes Lisbon special isn't just the sights — it's the feeling. Wander a few steps off the main squares and you'll discover a quieter, more authentic side: sun-drenched alleys, charming tiled facades, and friendly locals going about their daily lives, inviting you to slow down and savor every moment.
->
-> Of course, the must-see São Jorge Castle offers stunning views over the rooftops below. The queues can be long, but the experience is absolutely worth it for any history buff or curious traveler.
->
-> Would I go back? Absolutely. Lisbon isn't just a place to visit — it's a place to fall in love with, again and again. If you're dreaming of your next getaway, this is one destination that promises memories to last a lifetime. ✨
+**Problema:** son andamios. No dicen nada; solo anuncian que ahora viene algo importante. Apiladas, convierten cualquier texto en relleno con tono solemne. A veces una sola es legítima; el tell es la acumulación y el usarlas sin sustancia detrás.
 
-**Draft rewrite:**
-> I spent five days in Lisbon last October and I am still a little split on it. The city is beautiful, but it is also more tiring than I expected.
->
-> The hills are not a detail. My hotel was in Alfama, which looked great in photos and meant I had to climb a long staircase every time I wanted coffee. By the second day I was planning walks around which direction went downhill.
->
-> I rode Tram 28 because everyone says to ride Tram 28. It was crowded, slow, and mostly full of people filming the same corners. The pastries were better. I had a warm custard tart in Graça that was worth the hype.
->
-> The part I liked most was away from the main squares: laundry, tile, open windows, and people watching football in small cafes. The castle view was good, but the line was too long for what it was.
->
-> I would go back, but in spring and with better shoes.
+**Antes:**
+> Es importante destacar que, en el contexto actual, la digitalización resulta fundamental para las empresas. Sin lugar a dudas, juega un papel clave a día de hoy.
 
-**What makes the below so obviously AI generated?**
-- The draft is too compressed compared with the original; it drops texture instead of rewriting it.
-- Some sentences still explain the point too cleanly ("The city is beautiful, but...").
-- The closer is flat and generic rather than a real ending in the same voice.
+**Después:**
+> Para muchas empresas, vender por internet ya es imprescindible.
 
-**Now make it not obviously AI generated.**
-> I spent five days in Lisbon last October and still have mixed feelings about it. Beautiful, yes. Also harder on the knees than anyone warned me.
+### 2. Anglicismos innecesarios y falsos amigos
+
+**Para vigilar:** *librería* por *biblioteca* (en programación), *soportar* por *admitir / ser compatible con / tolerar*, *consistente* por *coherente*, *eventualmente* por *finalmente / con el tiempo* (no por *occasionally*), *actualmente* usado a cada rato como calco de *currently*, *aplicar para* por *solicitar / presentarse a*, *remover* por *quitar / eliminar* (fuera de "remover el café"), *asumir* por *suponer / dar por hecho*, *eficiente* donde toca *eficaz*, *en términos de*, *performance* por *rendimiento*, *feedback* por *comentarios / opiniones*, *basado en* por *según / a partir de*.
+
+**Problema:** hacen que el texto suene traducido del inglés con Google. Conserva el anglicismo cuando ya es natural en su campo (*software*, *marketing*, *online*, *bug*); cámbialo cuando hay una palabra española viva y mejor.
+
+**Antes:**
+> La librería soporta varios formatos y es consistente con el estándar. Eventualmente añadiremos más, basado en el feedback de los usuarios.
+
+**Después:**
+> La biblioteca admite varios formatos y cumple el estándar. Más adelante añadiremos otros según lo que pidan los usuarios.
+
+### 3. Adjetivos y verbos genéricos (relleno valorativo)
+
+**Para vigilar (adjetivos):** potente, robusto, innovador, revolucionario, óptimo, integral, único, sólido, eficiente, dinámico, versátil, intuitivo, clave, fundamental, esencial. **(Verbos):** potenciar, optimizar, impulsar, maximizar, fortalecer, garantizar, revolucionar, empoderar.
+
+**Problema:** son comodines que sirven para todo y, por eso mismo, no dicen nada. "Una solución potente y versátil" describe cualquier cosa. Sustitúyelos por lo que de verdad hace algo, o quítalos.
+
+**Antes:**
+> Una herramienta potente y versátil que impulsa la productividad y optimiza tus procesos.
+
+**Después:**
+> Una herramienta que automatiza las facturas y te ahorra repetir el mismo trabajo cada semana.
+
+### 4. Perífrasis para no decir "ser" o "estar"
+
+**Para vigilar:** se erige como, se posiciona como, se consolida como, constituye, representa, se configura como, supone, ostenta, alberga.
+
+**Problema:** la IA rodea el verbo simple con construcciones infladas para sonar más seria. Casi siempre "es", "tiene" o "está" dicen lo mismo, mejor.
+
+**Antes:**
+> Madrid se erige como uno de los principales centros financieros y alberga la sede de numerosas empresas.
+
+**Después:**
+> Madrid es uno de los grandes centros financieros del país y tiene la sede de muchas empresas.
+
+## Bloque 2 — Sintaxis y estructura
+
+### 5. Nominalización pesada
+
+**Para vigilar:** la realización de, la implementación de, la optimización de, la utilización de, proceder a la, llevar a cabo la, con el objetivo de la, de cara a la consecución de.
+
+**Problema:** convertir verbos en sustantivos abstractos infla la frase y la enfría. "Procedimos a la realización de un análisis" es "analizamos" con tres palabras de más. Devuelve los verbos.
+
+**Antes:**
+> Se procedió a la realización de un análisis exhaustivo con el objetivo de la identificación de las áreas de mejora.
+
+**Después:**
+> Analizamos el proceso a fondo para ver qué se podía mejorar.
+
+### 6. Cadenas de "que" y "lo cual"; subordinación excesiva
+
+**Problema:** la IA encadena oraciones de relativo y abusa de "lo cual" hasta hacer frases largas, planas y difíciles de seguir. Una frase con tres "que" seguidos casi siempre son dos o tres frases cortas mal pegadas.
+
+**Antes:**
+> El sistema, que fue diseñado para gestionar usuarios, lo cual permite escalar, cuenta con una base de datos que almacena los datos que el cliente introduce.
+
+**Después:**
+> El sistema gestiona usuarios y escala bien. Guarda en su base de datos lo que introduce el cliente.
+
+### 7. Gerundios de relleno y de posterioridad
+
+**Para vigilar:** ...permitiendo, ...garantizando, ...logrando, ...facilitando, ...mejorando, colgados al final de la frase; y el gerundio de posterioridad ("Se cayó, rompiéndose el brazo").
+
+**Problema:** es el equivalente español del "-ing" final del inglés: se cuelga un gerundio para fingir profundidad o consecuencia. El de posterioridad, además, es incorrecto. Corta el gerundio y haz una frase nueva, o usa "y", "así" o "para".
+
+**Antes:**
+> La plataforma centraliza los datos, permitiendo una mejor toma de decisiones y garantizando la trazabilidad.
+
+**Después:**
+> La plataforma reúne todos los datos en un sitio. Así es más fácil decidir y se puede saber de dónde sale cada cifra.
+
+### 8. Simetría artificial
+
+**Para vigilar:** "no solo... sino también", "tanto... como", "ya sea... o", la regla de tres ("rápido, sencillo y eficaz"), pares equilibrados a cada frase.
+
+**Problema:** la IA adora la simetría: estructuras balanceadas, tríos, contraposiciones. En dosis altas suena a plantilla retórica. El "no solo X, sino también Y" es el caso más cantado. Rómpela: di las cosas seguidas, cambia el número de elementos, desequilibra.
+
+**Antes:**
+> No solo mejora el rendimiento, sino que también optimiza la experiencia, tanto para el usuario como para el administrador.
+
+**Después:**
+> Va más rápido y le facilita el trabajo al usuario y a quien lo administra.
+
+### 9. Conectores inflados y transiciones automáticas
+
+**Para vigilar:** además, asimismo, por otro lado, en este sentido, por consiguiente, cabe resaltar, en definitiva, en resumen, dicho esto, no obstante, abriendo casi cada párrafo o frase.
+
+**Problema:** un conector suelto está bien. La IA pone uno en cada arranque, como si cada idea necesitara presentación. El texto avanza a empujones de "Además... Por otro lado... Asimismo...". Quita la mayoría: las ideas se pueden suceder sin que alguien las anuncie.
+
+**Antes:**
+> Además, cabe mencionar que el proyecto avanza. Por otro lado, en este sentido, los resultados son positivos. Asimismo, conviene señalar que el equipo está motivado.
+
+**Después:**
+> El proyecto avanza y los resultados son buenos. El equipo está motivado.
+
+## Bloque 3 — Tono y registro
+
+### 10. Tono corporativo involuntario y autoridad vacía
+
+**Para vigilar:** solución integral, valor añadido, entregar valor, de forma sostenible, marcar la diferencia, llevar al siguiente nivel, sinergias, apostar por, poner el foco en, alineado con, de manera transversal.
+
+**Problema:** la IA tira a "informe de consultora" aunque le pidas algo cercano. Mucha afirmación rotunda y ningún dato. Suena seguro y no dice nada comprobable. Baja el volumen y aterriza: ¿qué hace, para quién, con qué resultado concreto?
+
+**Antes:**
+> Ofrecemos una solución integral que permite optimizar procesos y entregar valor de forma sostenible, marcando la diferencia en el sector.
+
+**Después:**
+> Nuestro software automatiza facturas y pedidos, así reduces el trabajo manual repetitivo.
+
+### 11. Marketing hueco y entusiasmo fabricado
+
+**Para vigilar:** experiencia enriquecedora/única/inolvidable, descubre/vive/disfruta como apertura, diseñado para ti, lleva tu X al siguiente nivel, todo lo que necesitas, y mucho más, signos de exclamación de relleno.
+
+**Problema:** entusiasmo sin contenido. Promete sensaciones en lugar de decir qué hace el producto. Cambia el adjetivo emocionante por la función concreta y deja que el beneficio se entienda solo.
+
+**Antes:**
+> Vive una experiencia enriquecedora con nuestra innovadora app de finanzas, diseñada para potenciar tu día a día. ¡Descúbrela!
+
+**Después:**
+> Con nuestra app de finanzas ves en qué se te va el dinero cada mes y cuánto podrías ahorrar.
+
+### 12. Falsa profundidad y aforismos
+
+**Para vigilar:** "la verdadera pregunta no es X, sino Y", "en el fondo", "al final del día", "no se trata de X, se trata de Y", "X es el nuevo Y", "los datos son el nuevo petróleo", "X no es una herramienta, es una filosofía".
+
+**Problema:** la IA disfraza una idea normal de sentencia profunda. La fórmula suena a sabiduría, pero al traducirla a algo concreto casi siempre se queda en una obviedad. Quédate con la afirmación de verdad que hay debajo.
+
+**Antes:**
+> En el fondo, la verdadera pregunta no es qué tecnología usamos, sino quiénes queremos ser. Los datos son el nuevo petróleo.
+
+**Después:**
+> La decisión técnica importa menos que para qué la queremos usar.
+
+### 13. Sobreexplicación y exceso de cautela
+
+**Para vigilar:** es importante tener en cuenta que, conviene recordar que, cabe la posibilidad de que, podría llegar a, en cierta medida, de alguna manera, hasta cierto punto, en la mayoría de los casos (cuando no aporta).
+
+**Problema:** dos vicios juntos. Uno: explicar lo obvio o avisar de que algo es importante en vez de decirlo. Otro: tanto matiz y tanta cautela que la frase deja de afirmar nada. Quita el andamio y suelta la idea.
+
+**Antes:**
+> Es importante tener en cuenta que, en cierta medida, esta medida podría llegar a tener algún efecto en los resultados.
+
+**Después:**
+> La medida puede afectar a los resultados.
+
+### 14. Atribuciones vagas
+
+**Para vigilar:** los expertos coinciden, según diversos estudios, está demostrado que, numerosas fuentes, se sabe que, está comprobado, muchos opinan que.
+
+**Problema:** la IA cuelga las afirmaciones de autoridades sin nombre. Si hay fuente, cítala. Si no la hay, di lo que de verdad se sabe o no afirmes de más. Nunca inventes el estudio, el dato ni el porcentaje para tapar el hueco.
+
+**Antes:**
+> Los expertos coinciden en que esta tecnología jugará un papel crucial en los próximos años.
+
+**Después:**
+> Todavía no está claro cuánto se va a adoptar: las previsiones cambian según quién las haga.
+
+### 15. Registro equivocado
+
+**Problema:** la IA usa el mismo traje para todo. Mete tono de circular de empresa en un mensaje de WhatsApp, o solemnidad académica en una ficha de producto. Ajusta el registro al canal y al lector (ver la sección **Registros**): no subas a "corporativo" lo que pide cercanía, ni bajes a coloquial lo que pide precisión.
+
+**Antes (un mensaje a un compañero):**
+> Estimado compañero: por la presente quisiera trasladarte que sería conveniente que procediéramos a revisar el documento adjunto.
+
+**Después:**
+> Oye, ¿le echas un ojo al documento cuando puedas? Creo que hay que revisarlo.
+
+## Bloque 4 — Estructura del texto
+
+### 16. Introducciones de plantilla
+
+**Para vigilar:** "En el mundo actual...", "A lo largo de la historia...", "Hoy en día, cada vez más...", "Desde tiempos inmemoriales...", "En un mundo cada vez más [globalizado/digital/competitivo]...".
+
+**Problema:** arranques de molde que valdrían para cualquier tema y no dicen nada del concreto. Empieza por el asunto, no por el universo.
+
+**Antes:**
+> En el mundo actual, cada vez más acelerado y digitalizado, la comunicación se ha convertido en un pilar fundamental para las organizaciones.
+
+**Después:**
+> Muchas empresas se comunican peor de lo que creen, y casi siempre por los mismos motivos.
+
+### 17. Cierres moralizantes y conclusiones previsibles
+
+**Para vigilar:** "En definitiva...", "En conclusión...", "el futuro es prometedor", "solo el tiempo lo dirá", "quienes apuesten por ello marcarán la diferencia", "ha llegado para quedarse", moraleja final.
+
+**Problema:** la IA cierra con una moraleja optimista y genérica que no añade nada. Si la conclusión repite lo dicho con música solemne, córtala. Cierra con un dato, una consecuencia concreta o, simplemente, con la última idea de verdad.
+
+**Antes:**
+> En definitiva, la innovación es el motor del futuro, y quienes apuesten por ella sin duda marcarán la diferencia.
+
+**Después:**
+> Las empresas que prueban cosas nuevas se equivocan más, pero también aprenden antes.
+
+### 18. Ritmo mecánico
+
+**Problema:** la IA escribe párrafos del mismo tamaño y frases de la misma longitud media. Sale un texto liso, sin respiración. La escritura humana alterna: una frase larga, una corta, un párrafo de una línea cuando hace falta. Rompe la regularidad a propósito.
+
+**Antes:**
+> El proyecto comenzó en enero con un equipo reducido. Durante los primeros meses se definieron los objetivos principales. Más tarde se incorporaron nuevos miembros al equipo. Finalmente se lanzó la primera versión del producto.
+
+**Después:**
+> El proyecto arrancó en enero con cuatro personas. Los primeros meses fueron de definir hacia dónde íbamos, y se notaba: avanzábamos despacio. Luego entró más gente. La primera versión salió en otoño.
+
+### 19. Encabezados de plantilla y fragmentados
+
+**Problema:** dos vicios. Uno: títulos de molde tipo "Retos y oportunidades", "Beneficios principales", "Conclusiones finales", que podrían encabezar cualquier texto. Otro: poner un encabezado y debajo una frase suelta que solo repite el encabezado antes de entrar en materia. Pon títulos que digan algo del contenido concreto y entra directo.
+
+**Antes:**
+> ## Beneficios
 >
-> The hills are the whole story and somehow never make the brochures. My hotel was up in Alfama, which photographs beautifully and translates, in practice, to climbing what felt like a six-story staircase every time I wanted coffee. By the second day my calves had opinions. I started planning each walk around which way was downhill, which is a strange way to see a city but probably an honest one.
+> Los beneficios son importantes.
 >
-> Everyone says to ride Tram 28, so I did, wedged against a stranger's backpack for forty minutes while three tour groups filmed the same corner. I would walk the route next time, or go before breakfast. The custard tarts, though, earn the fuss. I had one at a plain little place in Graça, still warm, and for about thirty seconds I understood why people build trips around pastry.
+> Esta función reduce el tiempo de carga a la mitad.
+
+**Después:**
+> ## Carga más rápida
 >
-> What I did not expect was how quiet the city gets away from the main squares. Two blocks uphill from any plaza it turns into laundry lines, chipped tile, open windows, and old men watching football with the sound turned up. That is the Lisbon I keep thinking about, not the castle.
+> Esta función reduce el tiempo de carga a la mitad.
+
+## Bloque 5 — Puntuación y formato (específico del español)
+
+### 20. La raya (—) al estilo inglés
+
+**Importante:** la raya existe y es correcta en español, pero se usa distinto que el *em dash* inglés. El tell de IA es usarla como en inglés: suelta, con espacios a los lados (` — `), como pausa dramática o como conector a mitad de frase. En español:
+
+- Para un inciso, la raya va **pegada** al inciso y en par: "El plan —anunciado sin previo aviso— afecta a miles". Casi siempre quedan mejor las comas o los paréntesis.
+- Para introducir una explicación, usa **dos puntos**, no la raya.
+- En diálogos sí se usa la raya de apertura; eso es correcto, no lo toques.
+
+Convierte la raya de estilo inglés en coma, dos puntos, punto y seguido o paréntesis, según el caso. No se trata de prohibir la raya, sino de que deje de usarse como en inglés.
+
+**Antes:**
+> El plan — anunciado sin previo aviso — afecta a miles de personas. No es un cambio menor — es una reforma completa.
+
+**Después:**
+> El plan, anunciado sin previo aviso, afecta a miles de personas. No es un cambio menor: es una reforma completa.
+
+### 21. Comillas según la variante
+
+**Problema:** mezclar tipos de comillas o usar comillas curvas tipográficas («smart quotes») junto con otros tells. No hay una sola comilla "correcta", pero hay coherencia:
+
+- **España, texto cuidado o editorial:** la norma son las latinas «...»; dentro, las inglesas "..." y luego las simples '...'.
+- **Latinoamérica y web en general:** las inglesas rectas "..." son lo habitual y aceptado.
+
+Respeta la convención de la variante y, sobre todo, no mezcles tres tipos en el mismo texto sin jerarquía. No conviertas comillas curvas en un tema si es lo único que hay: muchos editores las ponen solos.
+
+### 22. Mayúsculas en títulos (estilo inglés)
+
+**Problema:** poner En Mayúscula Todas Las Palabras Del Título, como en inglés. En español, los títulos van en **mayúscula solo en la primera palabra** (y en los nombres propios). Es uno de los tells visuales más claros de texto traducido o generado.
+
+**Antes:**
+> ## Estrategias De Crecimiento Y Alianzas Globales
+
+**Después:**
+> ## Estrategias de crecimiento y alianzas globales
+
+### 23. Exceso de negritas, emojis y listas demasiado perfectas
+
+**Problema:** varios tics de formato a la vez:
+- **Negritas mecánicas** en cada término "importante". Quita casi todas; deja la negrita para lo que de verdad destaca.
+- **Emojis** decorando títulos o viñetas (🚀, ✅, 💡). Fuera, salvo en redes muy informales si la voz lo pide.
+- **Listas demasiado simétricas:** todas las viñetas con la misma estructura, empezando por un término en negrita y dos puntos. A veces un párrafo en prosa se lee mejor que una lista perfecta; y a veces una lista corta es más clara que un párrafo. Elige según el contenido, no por defecto.
+
+**Antes:**
+> 🚀 **Rendimiento:** Hemos mejorado el rendimiento.
+> 🔒 **Seguridad:** Hemos reforzado la seguridad.
+> 💡 **Diseño:** Hemos renovado el diseño.
+
+**Después:**
+> La nueva versión va más rápida, cifra los datos de extremo a extremo y estrena interfaz.
+
+## Bloque 6 — Artefactos de IA
+
+### 24. Artefactos de chatbot y tono servil
+
+**Para vigilar:** ¡Claro!, ¡Por supuesto!, Aquí tienes, Espero que te sirva/ayude, ¿Quieres que...?, ¿Te gustaría que ampliara...?, avísame si necesitas algo más, ¡Excelente pregunta!, tienes toda la razón.
+
+**Problema:** texto pensado como respuesta de chat que se cuela en el contenido final. Y el tono servil de "¡qué buena pregunta!" que nadie usa al escribir de verdad. Quítalo entero.
+
+**Antes:**
+> ¡Claro! Aquí tienes un resumen de la Revolución Francesa. Espero que te sirva. ¿Quieres que amplíe algún punto?
+
+**Después:**
+> La Revolución Francesa empezó en 1789, cuando la crisis financiera y la escasez de pan desataron las protestas.
+
+### 25. Avisos de límite de conocimiento y relleno especulativo
+
+**Para vigilar:** "hasta mi última actualización", "según la información disponible", "no hay datos públicos", "mantiene un perfil discreto", "prefiere mantener su vida privada", "probablemente estudió/creció", "se cree que".
+
+**Problema:** dos tells unidos. Uno: el modelo deja avisos de fecha de corte en el texto. Otro: cuando no encuentra un dato, escribe un párrafo *sobre* que no lo encuentra y luego rellena con conjeturas plausibles ("mantiene un perfil discreto"), sin fuente. Di lo que no se sabe, o quita la frase. No disfraces una suposición de hecho.
+
+**Antes:**
+> Aunque no se dispone de información detallada sobre su infancia, es probable que creciera en una familia de clase media, lo que habría influido en su interés por la educación.
+
+**Después:**
+> No hay datos sobre su infancia en las fuentes disponibles. (O se omite la frase.)
+
+---
+
+# Registros
+
+El español cambia mucho según el registro, y la IA tiende a aplanarlos todos hacia el corporativo. Identifica cuál toca y humaniza dentro de él. Humanizar no es bajar el registro: es hacerlo creíble.
+
+- **Informal (chat, WhatsApp, notas):** frases cortas, *tú/vos*, alguna elipsis. No lo conviertas en infantil ni lo llenes de jerga porque sí. Cercano no es ridículo.
+- **Conversacional neutro (blog, divulgación):** claro y directo, primera o segunda persona, algo de opinión. Aquí es donde más se nota una buena humanización.
+- **Profesional (correos, propuestas, informes de empresa):** cortés y claro, sin coletillas de consultora. Quita "sinergias" y "valor añadido"; di qué propones y por qué. Profesional no es frío ni vacío.
+- **Académico:** preciso y argumentado, pero sin pompa. Conserva el rigor, los términos y las citas; quita la grandilocuencia, las nominalizaciones de adorno y el "es importante destacar". Académico no es recargado.
+- **Técnico:** lo primero es la claridad, los términos exactos y el orden lógico. No "embellezcas" la prosa técnica con adjetivos; un texto técnico bueno es seco a propósito. Respeta los anglicismos asentados del campo.
+- **Marketing:** evita el entusiasmo de relleno y el beneficio genérico. Concreta qué hace el producto y para quién. Una frase honesta vende más que tres exclamaciones.
+- **Ensayo personal / opinión:** aquí sí entra la voz, la duda, la primera persona, el ritmo irregular. Es el registro donde más se aplica la sección **Personalidad y voz**.
+
+# Niveles de intensidad
+
+Salvo que te pidan otra cosa, edita con intensidad **media**. Si la persona indica una, respétala.
+
+- **Suave:** quita solo los tells claros (muletillas, artefactos de chatbot, anglicismos, raya inglesa, mayúsculas de título). Toca lo mínimo de estructura. Útil cuando el texto ya es casi de la persona.
+- **Media (por defecto):** lo anterior más reescribir frases nominalizadas, romper la simetría, variar el ritmo y aterrizar el tono. Conserva el orden y las ideas.
+- **Profunda:** reescribe a fondo estructura, ritmo y voz, dentro del significado original. Para texto muy "de IA" o cuando piden que suene claramente a persona. Sigue sin inventar contenido.
+
+# Reglas de preservación
+
+Humanizar nunca es inventar ni distorsionar. **Puedes** simplificar, reordenar, aclarar, concretar, quitar relleno, suavizar exageraciones, variar el ritmo y conservar una ambigüedad que sea intencionada.
+
+**No puedes:**
+- Cambiar la postura o la intención de quien escribe.
+- Añadir datos, ejemplos, cifras, citas o fuentes que no estaban.
+- Hacer una afirmación más fuerte de lo que era el original.
+- Quitar un matiz importante.
+- Tocar un término técnico hasta volverlo incorrecto.
+- Cambiar una palabra precisa por una vaga "más natural".
+- Cambiar la variante o el nivel de formalidad sin que te lo pidan.
+
+Ante la duda entre sonar mejor o respetar el significado, gana el significado.
+
+---
+
+# Proceso y entrega
+
+1. Lee el texto e identifica variante, registro y todos los patrones de arriba.
+2. Escribe un **borrador**. Compruébalo en voz alta: ¿varía el ritmo?, ¿prefiere lo concreto?, ¿usa "ser/estar/tener" en vez de perífrasis?, ¿mantiene el registro y la variante?
+3. Pregúntate: **"¿Qué hace que esto todavía suene a IA?"** Responde en dos o tres viñetas con los tells que queden.
+4. Reescribe una **versión final** que los corrija.
+
+Antes de entregar, repasa que no haya quedado ninguna raya de estilo inglés (` — `) ni mayúsculas de título a la inglesa.
+
+Entrega: el borrador, las viñetas de "todavía suena a IA", la versión final y, si ayuda, un resumen corto de los cambios. Si tuviste que asumir variante o registro, dilo en una línea.
+
+# Ejemplo completo
+
+**Antes (suena a IA, publicación de empresa en LinkedIn):**
+> 🚀 En el mundo actual, cada vez más competitivo y digitalizado, la transformación digital se ha convertido, sin lugar a dudas, en un pilar fundamental para las organizaciones que buscan marcar la diferencia.
 >
-> The castle is fine. The view is great, the queue is long, and I spent more time shuffling toward the entrance than looking at anything once I got inside. If I had only two days, I would trade it for an afternoon of getting lost.
+> En este sentido, nuestra innovadora solución integral no solo permite optimizar los procesos, sino que también potencia la productividad de los equipos, garantizando resultados sostenibles y entregando valor de forma continua.
 >
-> I would go back, but in spring and with better shoes. Lisbon does not bend over backward to make things easy for you. I think I liked that, even when my legs disagreed.
+> Además, cabe destacar que, gracias a un enfoque centrado en el cliente, ayudamos a las empresas a llevar su negocio al siguiente nivel. En definitiva, la innovación es el motor del futuro, y quienes apuesten por ella marcarán la diferencia. ✨
+>
+> ¿Quieres saber más? ¡No dudes en contactarnos!
 
-**Changes made:** Kept the first-person travel recap and roughly the same level of detail, but removed the chatbot framing, significance inflation, promotional language, forced enthusiasm, em dashes, rule-of-three cadence, generic upbeat conclusion, and emoji. Rebuilt the piece around concrete friction, mixed feelings, uneven rhythm, and specific scenes.
+**Borrador:**
+> Muchas empresas quieren "digitalizarse" sin tener claro para qué. Nosotros empezamos por ahí: por el problema concreto.
+>
+> Nuestro software automatiza tareas repetitivas como facturas, pedidos y seguimiento de clientes. En la práctica, eso le quita a los equipos varias horas de trabajo manual a la semana.
+>
+> Trabajamos pegados a cada cliente, viendo cómo funciona de verdad su negocio antes de tocar nada.
+>
+> Si quieres, te lo enseñamos con un caso parecido al tuyo.
 
+**¿Qué hacía que sonara a IA?**
+- Apertura de plantilla ("En el mundo actual...") y muletillas apiladas ("sin lugar a dudas", "en este sentido", "cabe destacar").
+- Tono de consultora vacío: "solución integral", "entregar valor", "siguiente nivel", "marcar la diferencia".
+- Simetría forzada ("no solo... sino también"), gerundios de relleno y cierre moralizante.
+- Emojis, exclamaciones y coletilla de chatbot al final.
 
-## Reference
+**Versión final:**
+> La mayoría de las empresas que nos llaman quieren "digitalizarse", pero no saben muy bien para qué. Así que empezamos por lo aburrido: qué tarea concreta les está comiendo el tiempo.
+>
+> Nuestro software se encarga de lo repetitivo: facturas, pedidos, seguimiento de clientes. No es magia ni transformación de nada. Es quitarle al equipo unas cuantas horas de copiar y pegar cada semana, que es justo donde se pierden.
+>
+> Lo que sí hacemos distinto es no llegar con la solución puesta. Primero miramos cómo funciona el negocio por dentro, porque casi nunca es como está en el organigrama.
+>
+> Si te suena, te enseñamos un caso parecido al tuyo y decides.
 
-This skill is based on [Wikipedia:Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing), maintained by WikiProject AI Cleanup. The patterns documented there come from observations of thousands of instances of AI-generated text on Wikipedia.
+**Cambios:** se mantuvo el propósito (promocionar un software de automatización) y la longitud aproximada, pero se quitó la apertura de molde, las muletillas, el tono de consultora, la simetría, los gerundios, el cierre moralizante, los emojis y la coletilla de chat. Se reconstruyó alrededor de algo concreto (qué hace el software, para quién) con ritmo irregular y una voz que se moja.
 
-Key insight from Wikipedia: "LLMs use statistical algorithms to guess what should come next. The result tends toward the most statistically likely result that applies to the widest variety of cases."
+# Lista de control final
+
+Antes de dar por buena la versión final, repasa:
+
+- [ ] ¿Quedan muletillas de IA ("es importante destacar", "en este sentido", "sin lugar a dudas")?
+- [ ] ¿Hay anglicismos o falsos amigos evitables (*soportar*, *consistente*, *eventualmente*, *librería* por *biblioteca*)?
+- [ ] ¿Sigue habiendo perífrasis donde cabría "ser", "estar" o "tener"?
+- [ ] ¿Hay nominalizaciones que deberían ser verbos?
+- [ ] ¿Cadenas de "que" o "lo cual", o frases demasiado largas?
+- [ ] ¿Simetría forzada ("no solo... sino", "tanto... como", tríos por defecto)?
+- [ ] ¿Conectores al principio de casi cada párrafo?
+- [ ] ¿Tono de consultora, marketing hueco o falsa profundidad?
+- [ ] ¿Atribuciones vagas sin fuente? ¿Se inventó algún dato? (No debe haberlo.)
+- [ ] ¿Apertura de plantilla o cierre moralizante?
+- [ ] ¿El ritmo varía o todas las frases miden igual?
+- [ ] ¿Raya de estilo inglés (` — `)? ¿Títulos con mayúscula a la inglesa?
+- [ ] ¿Exceso de negritas, emojis o listas demasiado perfectas?
+- [ ] ¿Artefactos de chatbot o tono servil?
+- [ ] ¿Se respetó la variante (España / LatAm / neutro) sin mezclarla?
+- [ ] ¿Se respetó el registro y el nivel de formalidad?
+- [ ] ¿Se conservó el significado, los datos, la postura y la voz?
+
+---
+
+# Guía de detección
+
+## Cuándo NO corregir (falsos positivos)
+
+Una persona que escribe bien puede dar en varios de estos patrones sin que haya IA por medio. Antes de reescribir, comprueba que no estás destrozando buena prosa. Por sí solos, **no** son prueba de IA:
+
+- **Gramática y ortografía perfectas.** Mucha gente escribe bien o ha pasado por un corrector. Pulcro no es sinónimo de IA.
+- **Vocabulario culto.** La IA abusa de palabras concretas (las del patrón 3), no de toda palabra elegante. No aplanes "no obstante", "asimismo" o un término preciso solo por sonar formal.
+- **La raya bien usada.** Muchos editores y periodistas usan la raya para incisos, pegada y en par. Eso es correcto. El tell es la raya **suelta y con espacios**, al estilo inglés.
+- **Comillas latinas o curvas solas.** En España «...» es la norma editorial, y muchos programas curvan las comillas automáticamente. Solo cuentan si se suman a otros tells.
+- **Un conector aislado.** Un "sin embargo" o un "además" no son nada. El tell es la acumulación, uno en cada arranque.
+- **Una frase corta y seca para rematar.** Es un recurso humano. Solo preocupa cuando se encadenan varias para fabricar dramatismo.
+- **Registro mezclado.** Saltar de lo formal a lo coloquial suele indicar a una persona real, no a un chatbot.
+- **Texto sin fuentes.** Casi toda la web va sin citar. No prueba nada.
+- **Texto citado o de ejemplo.** No reescribas una muletilla que está dentro de una cita, un título, un nombre propio o un ejemplo donde la frase se comenta en vez de usarse.
+
+Ante la duda, busca **racimos** de tells, no casos sueltos. Una raya no significa nada. Una raya inglesa + regla de tres + "solución integral" + un apartado de "Retos y oportunidades" es una confesión.
+
+## Señales de escritura humana (consérvalas)
+
+Cuando veas esto, tiende a dejar la prosa en paz: son rastro de una persona, y pasarte editando destruye justo lo que la hace humana.
+
+- **Detalle concreto, raro, difícil de inventar.** Una dirección real, una cita extraña, "el abogado que tenía el despacho encima del de mi dentista". La IA redondea los detalles; las personas los acumulan.
+- **Sentimientos encontrados sin resolver.** "Creo que está bien, pero algo me chirría y no sé explicar qué." La IA tiende a la opinión limpia y cerrada.
+- **Referencias de una época concreta.** Jerga, memes o guiños que sitúan el texto en un año y un ambiente. Los modelos van con retraso.
+- **Decisiones de estilo que el autor podría defender.** Si quien escribe sabe explicar por qué cortó algo o eligió esa palabra, es señal fuerte de persona.
+- **Variedad real en la longitud de las frases.** El texto humano alterna; el de IA tiende a una cadencia media y uniforme.
+- **Incisos, paréntesis y autocorrecciones genuinas.** "(Iba a decir 'casi', pero no: era seguro.)" Los modelos rara vez se interrumpen así.
+
+---
+
+# Referencia
+
+Este skill es una adaptación al español del proyecto [Humanizer](https://github.com/blader/humanizer) (en inglés), que se basa en la guía [Wikipedia: Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) de WikiProject AI Cleanup.
+
+No es una traducción. La taxonomía, los detectores y los ejemplos se rediseñaron para los fallos propios del español generado por IA: muletillas y calcos del inglés, nominalización, simetría forzada, tono corporativo, uso anglosajón de la raya, mayúsculas de título a la inglesa y manejo de variantes (España, Latinoamérica, neutro). Las decisiones de diseño están explicadas en el README, en la sección "Decisiones de diseño informadas por la investigación".

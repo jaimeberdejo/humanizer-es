@@ -1,28 +1,40 @@
 # AGENTS.md
 
-Guidance for AI coding agents (Claude Code, Codex, Warp, etc.) working in this repository.
+Guía para agentes de IA (Claude Code, Codex, Warp, etc.) que trabajen en este repositorio.
 
-## What this repo is
+## Qué es este repo
 
-A portable agent skill implemented entirely as Markdown. The runtime artifact is `SKILL.md`: the agent reads its YAML frontmatter (metadata + allowed tools) followed by the editor prompt. There is no build step and no code to run, and the repo should avoid wording that limits support to one or two harnesses.
+Un *skill* portátil escrito íntegramente en Markdown. El artefacto en tiempo de ejecución es `SKILL.md`: el agente lee su *frontmatter* YAML (metadatos + herramientas permitidas) y luego el *prompt* del editor. No hay build ni código que ejecutar, y la documentación debe evitar atarse a uno o dos *harnesses*.
 
-## Key files
+**Importante: esto NO es un proyecto de traducción.** Es `humanizer-es`, una adaptación **nativa al español** del Humanizer en inglés ([blader/humanizer](https://github.com/blader/humanizer)). Conserva la arquitectura del original (frontmatter + patrones numerados con ejemplos antes/después, bucle borrador → auditoría → versión final, calibración de voz), pero el contenido lingüístico está rediseñado para los fallos propios del español. No traduzcas reglas pensadas para el inglés: el español falla de otra forma.
 
-- `SKILL.md` — the skill itself. YAML frontmatter (`name`, `version`, `description`, `compatibility`, `allowed-tools`) followed by the canonical, numbered pattern list with before/after examples. **This is the source of truth.**
-- `README.md` — for humans: installation, usage, a summary table of the patterns, and a version history.
-- `.claude-plugin/plugin.json` — optional Claude Code plugin manifest.
-- `.claude-plugin/marketplace.json` — optional single-repo marketplace entry so `/plugin marketplace add blader/humanizer` works.
+## Archivos clave
 
-## The maintenance contract
+- `SKILL.md` — el skill. *Frontmatter* YAML (`name`, `version`, `description`, `compatibility`, `allowed-tools`) seguido de la lista numerada de patrones. **Es la fuente de la verdad.**
+- `README.md` — para personas: instalación, uso, qué la diferencia del original, variantes, patrones y las decisiones de diseño informadas por la investigación.
+- `EJEMPLOS.md` — casos antes/después por registro (corporativo, académico, casual, técnico, marketing).
+- `.claude-plugin/plugin.json` — manifiesto del plugin de Claude Code.
+- `.claude-plugin/marketplace.json` — entrada de *marketplace* de un solo repo.
+- `LICENSE` — MIT. Conserva la atribución al autor original; este repo es una obra derivada.
 
-`SKILL.md` and `README.md` must stay in sync. When you change behavior or content:
+## El contrato de mantenimiento
 
-- **Patterns:** the skill currently defines **33 numbered patterns**. If you add, remove, or renumber any, update the README pattern table, its "N Patterns Detected" heading, and every cross-reference in the same change. Keep numbering stable unless you are deliberately renumbering.
-- **Version:** `SKILL.md` frontmatter has a `version:` field, `README.md` has a "Version History" section, and `.claude-plugin/plugin.json` has a `version` field. Bump them together so package metadata matches the skill. (`marketplace.json` intentionally omits a version so `plugin.json` stays the package source of truth.)
-- **Compatibility:** keep install and usage language harness-neutral. The skill should work in any agent harness that can load Markdown skill instructions; Claude Code, OpenCode, Codex, and other harnesses are examples, not limits.
-- **Non-obvious fixes:** if you change the prompt to handle a tricky failure mode (a repeated mis-edit, an unexpected tone shift), add a short note to the README version history explaining what was fixed and why.
+`SKILL.md` y `README.md` deben ir sincronizados. Cuando cambies contenido o comportamiento:
 
-## Editing SKILL.md
+- **Patrones:** el skill define **25 patrones numerados en 6 bloques**. Si añades, quitas o renumeras alguno, actualiza en el mismo cambio la lista de patrones del README y cualquier referencia cruzada. Mantén estable la numeración salvo que renumeres a propósito.
+- **Versión:** hay un campo `version:` en el *frontmatter* de `SKILL.md`, una sección "Historial de versiones" en `README.md` y un `version` en `.claude-plugin/plugin.json`. Súbelos juntos. (`marketplace.json` omite la versión a propósito para que `plugin.json` sea la fuente.)
+- **Compatibilidad:** mantén el lenguaje de instalación y uso neutro respecto al *harness*. El skill funciona en cualquiera que cargue instrucciones Markdown.
+- **Arreglos no obvios:** si cambias el *prompt* para resolver un fallo concreto (una mala edición repetida, un cambio de tono inesperado), añade una nota breve al historial del README explicando qué se arregló y por qué.
 
-- Preserve valid YAML frontmatter (formatting and indentation).
-- The prompt below the frontmatter is the product. Edit it like a careful instruction document, not code.
+## Reglas lingüísticas que hay que mantener a propósito
+
+- **Las reglas del español son intencionadas, no heredadas del inglés.** Por ejemplo: la raya (—) **es correcta** en español; el tell es usarla suelta y con espacios al estilo inglés. No la conviertas en "córtalas todas" copiando al original.
+- **Los ejemplos deben ser español nativo,** no traducciones. Si un antes/después suena a inglés traducido, está mal aunque ilustre el patrón.
+- **Las suposiciones regionales deben ser explícitas.** España, Latinoamérica y neutro se tratan por separado; el neutro es el valor por defecto cuando no se especifica. Nunca mezcles variantes dentro de un mismo texto ni fuerces *vosotros*, *ustedes* o modismos locales sin que se pidan.
+- **Preservar significado por encima de "sonar mejor".** El skill nunca debe inventar datos, cifras, citas ni ejemplos, ni cambiar la postura o el registro del autor. Si editas el *prompt*, no debilites estas reglas de preservación.
+
+## Editar SKILL.md
+
+- Conserva el *frontmatter* YAML válido (formato e indentación).
+- El cuerpo es el producto. Edítalo como un documento de instrucciones cuidado, no como código.
+- Escribe el skill en español (los metadatos técnicos pueden ir en inglés). Y aplícate el propio skill: que las instrucciones no caigan en las muletillas que el skill enseña a quitar.
