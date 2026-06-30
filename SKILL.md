@@ -1,6 +1,6 @@
 ---
 name: humanizer-es
-version: 1.0.0
+version: 1.1.0
 description: |
   Edita textos en español para que suenen naturales, creíbles y escritos por una
   persona, sin que parezcan generados por IA. Úsalo al revisar o reescribir texto
@@ -9,8 +9,8 @@ description: |
   y corrige muletillas de IA ("es importante destacar", "en este sentido"), calcos
   del inglés y falsos amigos, nominalización pesada, simetría artificial
   ("no solo... sino también"), tono corporativo vacío, marketing hueco, conectores
-  inflados, mayúsculas de estilo inglés en títulos, uso anglosajón de la raya y
-  artefactos de chatbot. Respeta variante (España, Latinoamérica, neutro), registro,
+  inflados, mayúsculas de estilo inglés en títulos, eliminación de la raya (—) por ser
+  una marca habitual de la IA, y artefactos de chatbot. Respeta variante (España, Latinoamérica, neutro), registro,
   voz del autor y contenido factual.
 license: MIT
 compatibility: any-agent
@@ -41,6 +41,17 @@ Cuando recibes un texto para humanizar:
 El bucle borrador → auditoría → versión final y lo que entregas están definidos en **Proceso y entrega**, más abajo.
 
 Idea de fondo: la IA escribe hacia la media. Elige la palabra más probable, la estructura más equilibrada, el tono más inofensivo. El resultado es un texto correcto y sin nadie dentro. Humanizar es devolverle a ese texto las decisiones que una persona sí toma: ser concreta, desequilibrar el ritmo, mojarse, cortar el relleno.
+
+## Principio rector: quita la marca de IA, no la calidad
+
+Esto es lo más importante de la skill, y va primero a propósito. El objetivo es **sustituir** lo que suena a IA por algo natural, **no vaciar el texto**. Las listas de patrones de abajo detectan; pero detectar un patrón no obliga a borrar la frase: casi siempre se reescribe, no se elimina.
+
+- **Sustituir, no borrar.** Cada patrón se reemplaza por una alternativa humana. Si una frase tiene una muletilla, quitas la muletilla, no la idea.
+- **El texto final pesa lo mismo que el original.** Si tenía cinco párrafos, salen cinco. Un "después" más corto solo se justifica si el "antes" estaba inflado, nunca por recortar por recortar. Humano también puede ser largo, cálido, formal o detallado.
+- **Toque mínimo que funcione.** Empieza por la intensidad más baja que arregle el problema. Ante la duda, **edita de menos**: pasarse aplanando hace tanto daño como dejar la marca de IA.
+- **La voz manda sobre la limpieza.** Un texto con personalidad y alguna aspereza es mejor que uno pulido y sin nadie dentro. No persigas la frase perfecta; persigue la creíble.
+
+Si al terminar el texto suena más plano, más frío o más genérico que el original, te has pasado: eso no es humanizar, es desinflar.
 
 ## Lo primero: variante y registro
 
@@ -111,6 +122,8 @@ Quitar los patrones de IA es solo la mitad. Un texto aséptico y sin voz canta t
 # Patrones de IA en español
 
 Veinticinco patrones, en seis bloques. No son reglas mecánicas: son sospechas. Antes de tocar nada, lee **Cuándo NO corregir**, al final.
+
+**Cómo leer los ejemplos de cada patrón.** Son quirúrgicos: aíslan **un** fallo para que se vea, y por eso muchos "después" salen cortos y secos. **No los tomes como modelo de la longitud, el registro ni la voz del texto final.** El objetivo real de calidad está en el **ejemplo completo** y en `EJEMPLOS.md`, donde el "después" conserva el peso y la voz del original. Recortar nunca es la meta; quitar el relleno de IA, sí.
 
 ## Bloque 1 — Léxico
 
@@ -348,21 +361,21 @@ Veinticinco patrones, en seis bloques. No son reglas mecánicas: son sospechas. 
 
 ## Bloque 5 — Puntuación y formato (específico del español)
 
-### 20. La raya (—) al estilo inglés
+### 20. La raya (—): elimínala
 
-**Importante:** la raya existe y es correcta en español, pero se usa distinto que el *em dash* inglés. El tell de IA es usarla como en inglés: suelta, con espacios a los lados (` — `), como pausa dramática o como conector a mitad de frase. En español:
+**Regla dura:** la versión final no lleva ninguna raya (—) ni guion largo. La raya es correcta en español, para incisos y diálogos, pero a fuerza de aparecer en todo lo que escribe la IA se ha convertido en una de sus marcas más reconocibles. Hoy una raya en mitad de un texto hace sospechar de IA aunque esté bien puesta, así que se trata como un tell y se quita, no como un recurso a usar con moderación.
 
-- Para un inciso, la raya va **pegada** al inciso y en par: "El plan —anunciado sin previo aviso— afecta a miles". Casi siempre quedan mejor las comas o los paréntesis.
-- Para introducir una explicación, usa **dos puntos**, no la raya.
-- En diálogos sí se usa la raya de apertura; eso es correcto, no lo toques.
+Sustituye cada raya, por orden de preferencia según el caso: punto y seguido (frase nueva), coma (inciso breve), dos puntos (cuando introduce una explicación) o paréntesis (un inciso de verdad). Vigila también la raya suelta con espacios (` — `) y el doble guion (` -- `), que se usan igual.
 
-Convierte la raya de estilo inglés en coma, dos puntos, punto y seguido o paréntesis, según el caso. No se trata de prohibir la raya, sino de que deje de usarse como en inglés.
+Única excepción: la raya de diálogo en narrativa literaria (—Hola —dijo—), que es estructural y no es donde vive el tell. Fuera de ese caso, ninguna raya en la versión final.
 
 **Antes:**
-> El plan — anunciado sin previo aviso — afecta a miles de personas. No es un cambio menor — es una reforma completa.
+> El plan —anunciado sin previo aviso— afecta a miles de personas. No es un cambio menor —es una reforma completa.
 
 **Después:**
 > El plan, anunciado sin previo aviso, afecta a miles de personas. No es un cambio menor: es una reforma completa.
+
+Antes de entregar, busca «—» en el texto. Si aparece (fuera de un diálogo literario), el borrador no está terminado.
 
 ### 21. Comillas según la variante
 
@@ -467,10 +480,12 @@ Ante la duda entre sonar mejor o respetar el significado, gana el significado.
 
 1. Lee el texto e identifica variante, registro y todos los patrones de arriba.
 2. Escribe un **borrador**. Compruébalo en voz alta: ¿varía el ritmo?, ¿prefiere lo concreto?, ¿usa "ser/estar/tener" en vez de perífrasis?, ¿mantiene el registro y la variante?
-3. Pregúntate: **"¿Qué hace que esto todavía suene a IA?"** Responde en dos o tres viñetas con los tells que queden.
-4. Reescribe una **versión final** que los corrija.
+3. Hazte **dos** preguntas, no una. Las dos importan igual:
+   - **¿Qué hace que esto todavía suene a IA?** (los tells que queden)
+   - **¿He aplanado el texto?** ¿Quité voz, textura, matices o concreción? ¿Lo dejé más corto, más frío o más genérico de lo que pedía el original? ¿Bajé el registro sin que me lo pidieran?
+4. Reescribe una **versión final** que corrija lo primero **sin** caer en lo segundo. Si en el borrador perdiste sustancia o voz, recupérala: humanizar quita el relleno de IA, no la calidad del texto.
 
-Antes de entregar, repasa que no haya quedado ninguna raya de estilo inglés (` — `) ni mayúsculas de título a la inglesa.
+Antes de entregar, repasa que no haya quedado ninguna raya (—), salvo en diálogos literarios, ni mayúsculas de título a la inglesa.
 
 Entrega: el borrador, las viñetas de "todavía suena a IA", la versión final y, si ayuda, un resumen corto de los cambios. Si tuviste que asumir variante o registro, dilo en una línea.
 
@@ -513,25 +528,27 @@ Entrega: el borrador, las viñetas de "todavía suena a IA", la versión final y
 
 # Lista de control final
 
-Antes de dar por buena la versión final, repasa:
+Antes de dar por buena la versión final, repasa las dos columnas. Las dos pesan igual: la primera comprueba que quitaste la marca de IA; la segunda, que **no** te cargaste el texto por el camino. Si la segunda falla, la edición no vale aunque la primera esté impecable.
 
+**¿Quité la marca de IA?**
 - [ ] ¿Quedan muletillas de IA ("es importante destacar", "en este sentido", "sin lugar a dudas")?
 - [ ] ¿Hay anglicismos o falsos amigos evitables (*soportar*, *consistente*, *eventualmente*, *librería* por *biblioteca*)?
-- [ ] ¿Sigue habiendo perífrasis donde cabría "ser", "estar" o "tener"?
-- [ ] ¿Hay nominalizaciones que deberían ser verbos?
-- [ ] ¿Cadenas de "que" o "lo cual", o frases demasiado largas?
-- [ ] ¿Simetría forzada ("no solo... sino", "tanto... como", tríos por defecto)?
+- [ ] ¿Sigue habiendo perífrasis donde cabría "ser", "estar" o "tener"; o nominalizaciones que deberían ser verbos?
+- [ ] ¿Cadenas de "que" o "lo cual", o simetría forzada ("no solo... sino", "tanto... como", tríos por defecto)?
 - [ ] ¿Conectores al principio de casi cada párrafo?
 - [ ] ¿Tono de consultora, marketing hueco o falsa profundidad?
-- [ ] ¿Atribuciones vagas sin fuente? ¿Se inventó algún dato? (No debe haberlo.)
 - [ ] ¿Apertura de plantilla o cierre moralizante?
-- [ ] ¿El ritmo varía o todas las frases miden igual?
-- [ ] ¿Raya de estilo inglés (` — `)? ¿Títulos con mayúscula a la inglesa?
-- [ ] ¿Exceso de negritas, emojis o listas demasiado perfectas?
+- [ ] ¿Queda alguna raya (—) fuera de un diálogo literario? ¿Títulos con mayúscula a la inglesa? ¿Exceso de negritas, emojis o listas demasiado perfectas?
 - [ ] ¿Artefactos de chatbot o tono servil?
+
+**¿Conservé la calidad?**
+- [ ] ¿El texto final pesa lo mismo que el original, o lo he recortado de más?
+- [ ] ¿Conserva la voz, la calidez y la personalidad de quien escribe, o ha quedado más frío y genérico?
+- [ ] ¿Mantiene la concreción y los detalles, o los he redondeado en algo vago?
+- [ ] ¿Suena natural en su registro, sin haberlo bajado a coloquial ni subido a corporativo por inercia?
+- [ ] ¿El ritmo varía de verdad, o lo he dejado todo en frases cortas iguales?
 - [ ] ¿Se respetó la variante (España / LatAm / neutro) sin mezclarla?
-- [ ] ¿Se respetó el registro y el nivel de formalidad?
-- [ ] ¿Se conservó el significado, los datos, la postura y la voz?
+- [ ] ¿Se conservó el significado, los datos y la postura, sin inventar nada?
 
 ---
 
@@ -543,7 +560,7 @@ Una persona que escribe bien puede dar en varios de estos patrones sin que haya 
 
 - **Gramática y ortografía perfectas.** Mucha gente escribe bien o ha pasado por un corrector. Pulcro no es sinónimo de IA.
 - **Vocabulario culto.** La IA abusa de palabras concretas (las del patrón 3), no de toda palabra elegante. No aplanes "no obstante", "asimismo" o un término preciso solo por sonar formal.
-- **La raya bien usada.** Muchos editores y periodistas usan la raya para incisos, pegada y en par. Eso es correcto. El tell es la raya **suelta y con espacios**, al estilo inglés.
+- **El guion corto (-).** El guion normal de palabras compuestas ("teórico-práctico") o de rangos no es una raya ni un tell; no lo toques. Lo que se elimina es la raya larga (—). Y la raya de diálogo en narrativa literaria también se conserva.
 - **Comillas latinas o curvas solas.** En España «...» es la norma editorial, y muchos programas curvan las comillas automáticamente. Solo cuentan si se suman a otros tells.
 - **Un conector aislado.** Un "sin embargo" o un "además" no son nada. El tell es la acumulación, uno en cada arranque.
 - **Una frase corta y seca para rematar.** Es un recurso humano. Solo preocupa cuando se encadenan varias para fabricar dramatismo.
@@ -551,7 +568,7 @@ Una persona que escribe bien puede dar en varios de estos patrones sin que haya 
 - **Texto sin fuentes.** Casi toda la web va sin citar. No prueba nada.
 - **Texto citado o de ejemplo.** No reescribas una muletilla que está dentro de una cita, un título, un nombre propio o un ejemplo donde la frase se comenta en vez de usarse.
 
-Ante la duda, busca **racimos** de tells, no casos sueltos. Una raya no significa nada. Una raya inglesa + regla de tres + "solución integral" + un apartado de "Retos y oportunidades" es una confesión.
+Ante la duda, busca **racimos** de tells, no casos sueltos. La raya se elimina siempre por formato (patrón 20), pero por sí sola no prueba que el texto sea de IA: una raya + regla de tres + "solución integral" + un apartado de "Retos y oportunidades", eso sí es una confesión.
 
 ## Señales de escritura humana (consérvalas)
 
@@ -570,4 +587,4 @@ Cuando veas esto, tiende a dejar la prosa en paz: son rastro de una persona, y p
 
 Este skill es una adaptación al español del proyecto [Humanizer](https://github.com/blader/humanizer) (en inglés), que se basa en la guía [Wikipedia: Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) de WikiProject AI Cleanup.
 
-No es una traducción. La taxonomía, los detectores y los ejemplos se rediseñaron para los fallos propios del español generado por IA: muletillas y calcos del inglés, nominalización, simetría forzada, tono corporativo, uso anglosajón de la raya, mayúsculas de título a la inglesa y manejo de variantes (España, Latinoamérica, neutro). Las decisiones de diseño están explicadas en el README, en la sección "Decisiones de diseño informadas por la investigación".
+No es una traducción. La taxonomía, los detectores y los ejemplos se rediseñaron para los fallos propios del español generado por IA: muletillas y calcos del inglés, nominalización, simetría forzada, tono corporativo, eliminación de la raya (—) por ser una marca de la IA, mayúsculas de título a la inglesa y manejo de variantes (España, Latinoamérica, neutro). Las decisiones de diseño están explicadas en el README, en la sección "Decisiones de diseño informadas por la investigación".

@@ -28,7 +28,7 @@ Un *skill* portátil escrito íntegramente en Markdown. El artefacto en tiempo d
 
 ## Reglas lingüísticas que hay que mantener a propósito
 
-- **Las reglas del español son intencionadas, no heredadas del inglés.** Por ejemplo: la raya (—) **es correcta** en español; el tell es usarla suelta y con espacios al estilo inglés. No la conviertas en "córtalas todas" copiando al original.
+- **Las reglas del español son intencionadas.** Por ejemplo: la raya (—) es correcta en español, pero se ha vuelto una marca reconocible de la IA, así que la versión final la elimina igualmente (coma, dos puntos, punto o paréntesis). La única excepción es la raya de diálogo literario. No la reintroduzcas como "uso correcto": aquí se decidió tratarla como tell a propósito.
 - **Los ejemplos deben ser español nativo,** no traducciones. Si un antes/después suena a inglés traducido, está mal aunque ilustre el patrón.
 - **Las suposiciones regionales deben ser explícitas.** España, Latinoamérica y neutro se tratan por separado; el neutro es el valor por defecto cuando no se especifica. Nunca mezcles variantes dentro de un mismo texto ni fuerces *vosotros*, *ustedes* o modismos locales sin que se pidan.
 - **Preservar significado por encima de "sonar mejor".** El skill nunca debe inventar datos, cifras, citas ni ejemplos, ni cambiar la postura o el registro del autor. Si editas el *prompt*, no debilites estas reglas de preservación.

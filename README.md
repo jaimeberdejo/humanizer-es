@@ -92,7 +92,7 @@ El original ataca *tells* del inglés (em dash, *title case*, "rule of three", v
 
 | Tema | Inglés (original) | Español (esta adaptación) |
 |------|-------------------|---------------------------|
-| Raya / em dash | "Córtalas todas" | La raya **es correcta** en español; el tell es usarla **suelta y con espacios** al estilo inglés. Se corrige a la norma española, no se prohíbe. |
+| Raya / em dash | "Córtalas todas" | La raya **es correcta** en español, pero se ha vuelto una marca de la IA: se **elimina** en la versión final (coma, dos puntos, punto o paréntesis). Única excepción: la raya de diálogo literario. |
 | Comillas | Curvas → rectas | Depende de la variante: «latinas» en España editorial, "rectas" en LatAm y web. Coherencia antes que un único tipo. |
 | Títulos | *Title Case* → sentence case | Mayúscula **solo** en la primera palabra; el *Título En Mayúsculas* es un tell de texto traducido. |
 | Léxico | *delve, tapestry, vibrant* | Muletillas españolas: "es importante destacar", "en este sentido", "sin lugar a dudas", "solución integral". |
@@ -131,15 +131,15 @@ Antes de adaptar el skill se investigó el problema en español, sin dar por hec
 **Qué se investigó.** Señales de texto en español generado por IA; *translationese* y calcos sintácticos del inglés; falsos amigos frecuentes (*soportar*, *consistente*, *eventualmente*, *actualmente*); recomendaciones de la RAE y Fundéu sobre raya, comillas y mayúsculas; las diferencias España / Latinoamérica / neutro; los manuales de lenguaje claro de varias administraciones; y cómo se percibe la prosa burocrática o "de consultora".
 
 **Problemas propios del español que se encontraron.**
-- La raya (—) **es legítima** en español (incisos y diálogos). Copiar la regla inglesa de "córtalas todas" sería un error de adaptación: el tell real es la raya *suelta, con espacios*, usada como el em dash inglés.
+- La raya (—) es legítima en español (incisos y diálogos), pero a fuerza de aparecer en todo lo que genera la IA se ha vuelto una de sus marcas más visibles. Por eso se **elimina** en la versión final aunque esté bien puesta: hoy lee como IA. La única excepción es la raya de diálogo literario, que es estructural y no es donde vive el tell. (Esto coincide con el "córtalas todas" del original inglés, pero por un motivo distinto y con una excepción propia del español.)
 - Las comillas no tienen un único "correcto": «latinas» son la norma editorial en España, las "rectas" dominan en LatAm y en la web. La regla útil es coherencia, no un tipo fijo.
 - El español tiene fallos sintácticos que el inglés no tiene en la misma medida: **nominalización deverbal** ("la realización de un análisis"), cadenas de **"que / lo cual"** y abuso de **gerundio** (incluido el de posterioridad, que además es incorrecto).
 - Las muletillas de IA en español son léxicamente distintas: "es importante destacar", "en este sentido", "sin lugar a dudas", "solución integral", "marcar la diferencia".
 - La variante regional es un eje que en el original no existe y que en español es ineludible.
 
-**Ideas del Humanizer en inglés que se conservaron.** La arquitectura general (frontmatter + patrones numerados con antes/después); el bucle borrador → auditoría → versión final; la calibración de voz desde muestras; la sección de personalidad para texto con voz; la guía de falsos positivos y de señales humanas; la regla de "reescribe, no recortes"; y la idea de buscar *racimos* de tells, no casos sueltos.
+**Ideas del Humanizer en inglés que se conservaron.** La arquitectura general (frontmatter + patrones numerados con antes/después); el bucle borrador → auditoría → versión final; la calibración de voz desde muestras; la sección de personalidad para texto con voz; la guía de falsos positivos y de señales humanas; la regla de "reescribe, no recortes"; el corte de la raya (—), que en español también se ha vuelto un tell; y la idea de buscar *racimos* de tells, no casos sueltos.
 
-**Ideas del original que se reemplazaron.** El corte total de la raya (sustituido por "úsala a la española"); curvas→rectas en comillas (sustituido por coherencia según variante); el vocabulario AI inglés (*delve*, *tapestry*); y los ejemplos, todos reescritos como texto español nativo, no traducido.
+**Ideas del original que se reemplazaron.** Las comillas curvas→rectas del original (sustituido por coherencia según variante); el vocabulario AI inglés (*delve*, *tapestry*); y los ejemplos, todos reescritos como texto español nativo, no traducido.
 
 **Categorías nuevas, propias del español.** Anglicismos y falsos amigos; nominalización pesada; cadenas de "que / lo cual"; gerundios de relleno; perífrasis para evitar "ser/estar"; tono corporativo involuntario; manejo de variante (España / LatAm / neutro); y una tabla de siete registros con reglas propias.
 
@@ -151,6 +151,7 @@ Adaptación al español de [blader/humanizer](https://github.com/blader/humanize
 
 ## Historial de versiones
 
+- **1.1.0** — Dos cambios. (1) La raya (—) pasa a eliminarse siempre en la versión final, no solo cuando se usa al estilo inglés: se ha vuelto una marca reconocible de la IA y por eso se trata como un tell aunque esté bien puesta. Única excepción: la raya de diálogo literario. (2) Reequilibrio contra el aplanamiento: la skill estaba encuadrada para borrar más que para reescribir, y desinflaba textos. Se añadió un "Principio rector" (sustituir, no vaciar; toque mínimo; la voz manda; ante la duda, editar de menos), una auditoría de dos preguntas, una checklist en dos columnas ("¿quité la marca de IA?" / "¿conservé la calidad?") y se reencuadraron los ejemplos por patrón como quirúrgicos, no como modelo de longitud. Ejemplos de `EJEMPLOS.md` reescritos para conservar peso y voz, y sin inventar datos.
 - **1.0.0** — Primera versión de la adaptación al español. Skill reescrito desde cero como `humanizer-es`: 25 patrones en 6 bloques pensados para el español generado por IA, manejo de variantes (España / LatAm / neutro), tabla de registros, niveles de intensidad, calibración de voz, ejemplo completo y lista de control. No es una traducción del original en inglés.
 
 ## Licencia
