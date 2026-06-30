@@ -13,6 +13,7 @@ Un *skill* portátil escrito íntegramente en Markdown. El artefacto en tiempo d
 - `SKILL.md` — el skill. *Frontmatter* YAML (`name`, `version`, `description`, `compatibility`, `allowed-tools`) seguido de la lista numerada de patrones. **Es la fuente de la verdad.**
 - `README.md` — para personas: instalación, uso, qué la diferencia del original, variantes, patrones y las decisiones de diseño informadas por la investigación.
 - `EJEMPLOS.md` — casos antes/después por registro (corporativo, académico, casual, técnico, marketing).
+- `PRUEBAS.md` — banco de pruebas: 10 textos de IA humanizados, con evaluación de calidad y comparación con el original inglés. Útil como regresión cualitativa al tocar la skill.
 - `.claude-plugin/plugin.json` — manifiesto del plugin de Claude Code.
 - `.claude-plugin/marketplace.json` — entrada de *marketplace* de un solo repo.
 - `LICENSE` — MIT. Conserva la atribución al autor original; este repo es una obra derivada.
